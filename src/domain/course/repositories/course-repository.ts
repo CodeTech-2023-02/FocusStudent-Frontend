@@ -6,7 +6,7 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { CourseEndpoints } from "../constants/endpoint";
-import { ICreateEditCourse, IRegisterResponse } from "../constants/interfaces";
+import { ICreateEditCourse, IGetAllResponse, IRegisterResponse } from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 
@@ -53,6 +53,16 @@ class CourseRepository {
       headers,
     });
   };
+
+  getAll = (): Promise<HttpResponse<IGetAllResponse[]>> => {
+    const url = buildUrl(CourseEndpoints.course);
+    const headers = UtilsHttp.BaseHeaders();
+    return this.httpClient.request({
+      method: HttpMethod.GET,
+      url,
+      headers,
+    });
+  }
 }
 
 const courseRepository = new CourseRepository(axiosHttpClient);

@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { courseRepository } from "../repositories/course-repository";
-import { ICreateEditCourse, IRegisterResponse } from "../constants/interfaces";
+import { ICreateEditCourse, IGetAllResponse, IRegisterResponse } from "../constants/interfaces";
 
 export function useCreateCourse() {
   return useMutation<IRegisterResponse, Error, ICreateEditCourse>({
@@ -24,5 +24,12 @@ export function useDeleteCourse() {
   return useMutation<IRegisterResponse, Error, number>({
     mutationFn: (courseId: number) =>
       courseRepository.delete(courseId).then((response) => response.body),
+  });
+}
+
+export function useGetAllCourses() {
+  return useMutation<IGetAllResponse[], Error, void>({
+    mutationFn: () =>
+      courseRepository.getAll().then((response) => response.body),
   });
 }

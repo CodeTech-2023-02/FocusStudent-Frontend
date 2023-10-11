@@ -7,3 +7,10 @@ export interface ICreateEditCourse {
 export interface IRegisterResponse {
   message: string;
 }
+
+export interface IGetAllResponse {
+    id:          number;
+    name:        string;
+    year:        number;
+    description: string;
+}

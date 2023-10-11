@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, IconButton, Grid } from "@mui/material";
+import { Box, Card, CardContent, IconButton, Grid, Drawer } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EditIcon from "@mui/icons-material/Edit";
@@ -10,18 +10,20 @@ interface CourseCardProps {
   course: ICourseForm;
   onEdit: (course: ICourseForm) => void;
   onDelete: (course: ICourseForm) => void;
+  role: string;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
   course,
   onEdit,
   onDelete,
+  role
 }) => {
   const [showActions, setShowActions] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   return (
     <Card
-      onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       sx={{ pb: "2px", maxWidth: 300, marginLeft: "auto", marginRight: "auto" }}
     >
@@ -53,22 +55,45 @@ const CourseCard: React.FC<CourseCardProps> = ({
             justifyContent="flex-end"
             alignItems="center"
           >
-            {showActions ? (
-              <>
-                <IconButton color="primary" onClick={() => onEdit(course)}>
-                  <EditIcon sx={{ fontSize: 22 }} />
-                </IconButton>
-                <IconButton color="error" onClick={() => onDelete(course)}>
-                  <DeleteIcon sx={{ fontSize: 22 }} />
-                </IconButton>
-              </>
+            {role === 'TEACHER' ? (
+              <ArrowForwardIosIcon
+                fontSize="large"
+                onClick={() => setDrawerOpen(true)}
+                style={{ cursor: 'pointer' }}
+              />
             ) : (
-              <ArrowForwardIosIcon fontSize="large" />
+              showActions ? (
+                <>
+                  <IconButton color="primary" onClick={() => onEdit(course)}>
+                    <EditIcon sx={{ fontSize: 22 }} />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => onDelete(course)}>
+                    <DeleteIcon sx={{ fontSize: 22 }} />
+                  </IconButton>
+                </>
+              ) : (
+                <ArrowForwardIosIcon
+                  fontSize="large"
+                  onMouseEnter={() => setShowActions(true)}
+
+                  style={{ cursor: 'pointer' }}
+                />
+              )
             )}
           </Grid>
         </Grid>
       </CardContent>
+      {role === 'TEACHER' && (
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <h1>Hola</h1>
+        </Drawer>
+      )}
     </Card>
   );
 };
+
 export default CourseCard;

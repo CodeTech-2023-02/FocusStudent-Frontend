@@ -13,19 +13,18 @@ import { Roles } from "./constants/roles";
 import {
   LOGIN,
   ROOT,
-  STUDENT_DASHBOARD,
-  TEACHER_COURSE,
-  TEACHER_DASHBOARD,
-  TEACHER_POLICY,
-  TEACHER_REPORT,
-  TEACHER_STUDENTS,
+  DASHBOARD,
+  COURSE,
+  POLICY,
+  REPORT,
+  STUDENTS,
   UNAUTHORIZED,
 } from "./constants/routes";
 import { useAuth } from "./state/AuthContext";
 import ThemeProvider from "./theme/ThemeProvider";
 import ProtectedElement from "./utils/ProtectedElement";
 import SidebarLayout from "./abstracts/Sidebar/SidebarLayout";
-import Register from "./components/Auth/Register";
+import Support from "./components/Auth/Support";
 import Unauthorized from "./components/Common/Unauthorized";
 import NotFound from "./components/Common/NotFound";
 
@@ -44,9 +43,8 @@ const AppRouter: React.FC = () => {
               isLoggedIn ? (
                 <Navigate
                   to={
-                    isLoggedIn.role === Roles.TEACHER
-                      ? TEACHER_DASHBOARD
-                      : STUDENT_DASHBOARD
+                    isLoggedIn.role === Roles.TEACHER || isLoggedIn.role === Roles.ADMIN ? DASHBOARD : DASHBOARD
+
                   }
                 />
               ) : (
@@ -61,8 +59,8 @@ const AppRouter: React.FC = () => {
                 <Navigate
                   to={
                     isLoggedIn.role === Roles.STUDENT
-                      ? STUDENT_DASHBOARD
-                      : TEACHER_DASHBOARD
+                      ? DASHBOARD
+                      : DASHBOARD
                   }
                 />
               ) : (
@@ -71,18 +69,18 @@ const AppRouter: React.FC = () => {
             }
           />
           <Route
-            path="/register"
+            path="/support"
             element={
               isLoggedIn ? (
                 <Navigate
                   to={
                     isLoggedIn.role === Roles.STUDENT
-                      ? STUDENT_DASHBOARD
-                      : TEACHER_DASHBOARD
+                      ? DASHBOARD
+                      : DASHBOARD
                   }
                 />
               ) : (
-                <Register />
+                <Support />
               )
             }
           />
@@ -91,82 +89,82 @@ const AppRouter: React.FC = () => {
           {/* SidebarLayout wrapping the nested routes */}
           <Route element={<SidebarLayout />}>
             <Route
-              path={TEACHER_DASHBOARD}
+              path={DASHBOARD}
               element={
-                <ProtectedElement role="TEACHER">
+                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <TeacherDashboard />
                 </ProtectedElement>
               }
             />
             <Route
-              path={TEACHER_COURSE}
+              path={COURSE}
               element={
-                <ProtectedElement role="TEACHER">
+                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <CourseComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={TEACHER_STUDENTS}
+              path={STUDENTS}
               element={
-                <ProtectedElement role="TEACHER">
+                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <StudentsComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={TEACHER_REPORT}
+              path={REPORT}
               element={
-                <ProtectedElement role="TEACHER">
+                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <ReportComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={TEACHER_POLICY}
+              path={POLICY}
               element={
-                <ProtectedElement role="TEACHER">
+                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <PolicyComponent />
                 </ProtectedElement>
               }
             />
 
             <Route
-              path={STUDENT_DASHBOARD}
+              path={DASHBOARD}
               element={
-                <ProtectedElement role="STUDENT">
+                <ProtectedElement roles={["STUDENT"]}>
                   <StudentDashboard />
                 </ProtectedElement>
               }
             />
             <Route
-              path={`${STUDENT_DASHBOARD}/course`}
+              path={`${DASHBOARD}/course`}
               element={
-                <ProtectedElement role="STUDENT">
+                <ProtectedElement roles={["STUDENT"]}>
                   <CourseComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={`${STUDENT_DASHBOARD}/tracking`}
+              path={`${DASHBOARD}/tracking`}
               element={
-                <ProtectedElement role="STUDENT">
+                <ProtectedElement roles={["STUDENT"]}>
                   <TrackingComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={`${STUDENT_DASHBOARD}/reports`}
+              path={`${DASHBOARD}/reports`}
               element={
-                <ProtectedElement role="STUDENT">
+                <ProtectedElement roles={["STUDENT"]}>
                   <ReportComponent />
                 </ProtectedElement>
               }
             />
             <Route
-              path={`${STUDENT_DASHBOARD}/policy`}
+              path={`${DASHBOARD}/policy`}
               element={
-                <ProtectedElement role="STUDENT">
+                <ProtectedElement roles={["STUDENT"]}>
                   <PolicyComponent />
                 </ProtectedElement>
               }

@@ -3,21 +3,18 @@ import { useContext } from "react";
 import { Box, Button, List, ListItem, alpha, styled } from "@mui/material";
 
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Roles } from "../../constants/roles";
 import {
-  STUDENT_COURSE,
-  STUDENT_DASHBOARD,
-  STUDENT_POLICY,
+  COURSE,
+  DASHBOARD,
+  POLICY,
+  REPORT,
+  STUDENTS,
   STUDENT_REPORTS,
-  STUDENT_TRACKING,
-  TEACHER_COURSE,
-  TEACHER_DASHBOARD,
-  TEACHER_POLICY,
-  TEACHER_REPORT,
-  TEACHER_STUDENTS,
+  STUDENT_TRACKING
 } from "../../constants/routes";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { useAuth } from "../../state/AuthContext";
-import { Roles } from "../../constants/roles";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -169,27 +166,35 @@ function SidebarMenu() {
   const auth = useAuth();
   const currentUserRole = auth?.currentUser?.role || "";
 
-  const studentRoutes = [
-    { path: STUDENT_DASHBOARD, label: "Dashboard" },
-    { path: STUDENT_TRACKING, label: "Tracking" },
-    { path: STUDENT_COURSE, label: "Cursos" },
-    { path: STUDENT_REPORTS, label: "Reportes" },
-    { path: STUDENT_POLICY, label: "Políticas" },
+  const teacherAdminRoutes = [
+    { path: DASHBOARD, label: "Dashboard" },
+    { path: COURSE, label: "Cursos" },
+    { path: STUDENTS, label: "Estudiantes" },
+    { path: REPORT, label: "Reportes" },
+    { path: POLICY, label: "Políticas" },
   ];
 
-  const teacherRoutes = [
-    { path: TEACHER_DASHBOARD, label: "Dashboard" },
-    { path: TEACHER_COURSE, label: "Cursos" },
-    { path: TEACHER_STUDENTS, label: "Estudiantes" },
-    { path: TEACHER_REPORT, label: "Reportes" },
-    { path: TEACHER_POLICY, label: "Políticas" },
+
+  const studentRoutes = [
+    { path: DASHBOARD, label: "Dashboard" },
+    { path: STUDENT_TRACKING, label: "Tracking" },
+    { path: COURSE, label: "Cursos" },
+    { path: STUDENT_REPORTS, label: "Reportes" },
+    { path: POLICY, label: "Políticas" },
   ];
+
+
 
   let routes: any[] = [];
-  if (currentUserRole.toUpperCase() === Roles.STUDENT) {
+  if (
+    currentUserRole.toUpperCase() === Roles.STUDENT
+  ) {
     routes = studentRoutes;
-  } else if (currentUserRole.toUpperCase() === Roles.TEACHER) {
-    routes = teacherRoutes;
+  } else if (
+    currentUserRole.toUpperCase() === Roles.TEACHER ||
+    currentUserRole.toUpperCase() === Roles.ADMIN
+  ) {
+    routes = teacherAdminRoutes;
   }
 
   return (

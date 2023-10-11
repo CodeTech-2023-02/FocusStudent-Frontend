@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import React from "react";
 import CourseCard from "./Card/CourseCard";
 import { CourseFormDialog } from "./Dialogs/CourseFormDialog";
@@ -9,35 +9,21 @@ import {
   useCreateCourse,
   useDeleteCourse,
   useEditCourse,
+  useGetAllCourses,
 } from "../../../domain/course/services/course-service";
+import { useAuth } from "../../../state/AuthContext";
 
 const CourseComponent: React.FC = () => {
   const confirmationDeleteModal = useModal();
+  const [loading, setLoading] = React.useState(true);
+  const [courses, setCourses] = React.useState<ICourseForm[]>([]);
+
 
   const createCourseMutation = useCreateCourse();
   const editCourseMutation = useEditCourse();
   const deleteCourseMutation = useDeleteCourse();
+  const getCourseMutation = useGetAllCourses();
 
-  const courses: ICourseForm[] = [
-    {
-      id: 1,
-      name: "Matemáticas",
-      year: 30,
-      description: "Clase de matemáticas para estudiantes de primaria",
-    },
-    {
-      id: 2,
-      name: "Ciencias",
-      year: 25,
-      description: "Clase de ciencias para estudiantes de secundaria",
-    },
-    {
-      id: 3,
-      name: "Programación",
-      year: 20,
-      description: "Clase de programación para estudiantes de preparatoria",
-    },
-  ];
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
@@ -45,9 +31,31 @@ const CourseComponent: React.FC = () => {
     ICourseForm | undefined
   >();
 
+  const { currentUser } = useAuth();
+  const role = currentUser?.role || '';
+
   const [dialogMode, setDialogMode] = React.useState<"create" | "edit">(
     "create"
   );
+
+  const fetchCourses = () => {
+    setLoading(true);
+    getCourseMutation.mutate(undefined, {
+      onSuccess: (response) => {
+        setCourses(response);
+        setLoading(false);
+      },
+      onError: (error) => {
+        console.error("Error al obtener los cursos:", error);
+        setLoading(false);
+      },
+    });
+  };
+  
+  React.useEffect(() => {
+    fetchCourses();
+  }, []);
+  
 
   const handleCreateCourse = () => {
     setDialogMode("create");
@@ -79,14 +87,28 @@ const CourseComponent: React.FC = () => {
       () => {
         confirmationDeleteModal.startProcessing();
         deleteCourseMutation.mutate(course.id!, {
-          onSuccess: (response) => {
-            console.log("Curso eliminado con éxito:", response.message);
+          onSuccess: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => { },
+              "Operación exitosa",
+              "Curso eliminado con éxito"
+            );
             confirmationDeleteModal.stopProcessing();
             confirmationDeleteModal.closeModal();
-            // Actualiza la lista de cursos si es necesario
+            fetchCourses();
           },
-          onError: (error) => {
-            console.error("Error al eliminar curso:", error);
+          onError: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => { },
+              "Ocurrió un error",
+              "No se pudo eliminar el curso"
+            );
             confirmationDeleteModal.stopProcessing();
             confirmationDeleteModal.closeModal();
           },
@@ -108,21 +130,20 @@ const CourseComponent: React.FC = () => {
             () => {
               successModal.closeModal();
             },
-            () => {},
+            () => { },
             "Operación exitosa",
             response.message
           );
           handleCloseDialog();
-          // Aquí puedes actualizar la lista de cursos si es necesario
+          fetchCourses();
         },
         onError: (error: any) => {
-          debugger;
           console.error("Error al crear curso:", error);
           successModal.openModal(
             () => {
               successModal.closeModal();
             },
-            () => {},
+            () => { },
             "Ocurrió un error",
             error.response.data.message
           );
@@ -136,24 +157,24 @@ const CourseComponent: React.FC = () => {
       editCourseMutation.mutate(
         { courseId: selectedCourse.id, data },
         {
-          onSuccess: (response) => {
+          onSuccess: () => {
             successModal.openModal(
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Operación exitosa",
-              response.message
+              "Curso editado con éxito"
             );
             handleCloseDialog();
-            // Actualiza la lista de cursos si es necesario
+            fetchCourses();
           },
           onError: (error: any) => {
             successModal.openModal(
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Ocurrió un error",
               error.response.data.message
             );
@@ -171,15 +192,20 @@ const CourseComponent: React.FC = () => {
           Crear nuevo curso
         </Button>
         <Grid container spacing={3} pt={4}>
-          {courses.map((course, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <CourseCard
-                course={course}
-                onEdit={handleEditCourse}
-                onDelete={handleDeleteCourse}
-              />
-            </Grid>
-          ))}
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            courses.map((course, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <CourseCard
+                  course={course}
+                  onEdit={handleEditCourse}
+                  onDelete={handleDeleteCourse}
+                  role={role}
+                />
+              </Grid>
+            ))
+          )}
         </Grid>
         <CourseFormDialog
           key={selectedCourse ? selectedCourse.name : "new-course"}

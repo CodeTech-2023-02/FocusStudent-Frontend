@@ -2,12 +2,12 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../state/AuthContext";
 
 interface ProtectedElementProps {
-  role?: string;
+  roles?: string[]; 
   children: React.ReactElement;
 }
 
 const ProtectedElement: React.FC<ProtectedElementProps> = ({
-  role,
+  roles,
   children,
 }) => {
   const auth = useAuth();
@@ -18,7 +18,7 @@ const ProtectedElement: React.FC<ProtectedElementProps> = ({
 
   const { currentUser } = auth;
 
-  if (role && currentUser.role !== role) {
+  if (roles && !roles.includes(currentUser.role)) {
     return <Navigate to="/unauthorized" />;
   }
 

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Roles } from "../../constants/roles";
-import { STUDENT_DASHBOARD, TEACHER_DASHBOARD } from "../../constants/routes";
+import {  DASHBOARD } from "../../constants/routes";
 import { useLogin } from "../../domain/auth/services/auth-service";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -36,8 +36,8 @@ const loginSchema = yup.object().shape({
   username: yup
     .string()
     .matches(
-      /_estudiante|_profesor/,
-      'El correo debe contener "_estudiante" o "_profesor" antes del @.'
+      /_estudiante|_profesor|_admin/,
+      'El correo debe contener "_estudiante" o "_profesor" o "_admin" antes del @.'
     )
     .required("Correo es requerido"),
   password: yup.string().required("Contraseña es requerida"),
@@ -90,9 +90,9 @@ const Login = () => {
           });
 
           if (data.role === Roles.TEACHER) {
-            navigate(TEACHER_DASHBOARD);
+            navigate(DASHBOARD);
           } else if (data.role === Roles.STUDENT) {
-            navigate(STUDENT_DASHBOARD);
+            navigate(DASHBOARD);
           }
         },
         onError: (error: any) => {
@@ -168,11 +168,8 @@ const Login = () => {
 
             <Grid item mt={4}>
               <Typography variant="body2">
-                ¿No tienes una cuenta?
-                <Link onClick={() => navigate("/register")}>
-                  {" "}
-                  REGISTRATE AQUÍ
-                </Link>
+                ¿Problemas con tu cuenta?
+                <Link onClick={() => navigate("/support")}> Contacta a soporte</Link>
               </Typography>
             </Grid>
 

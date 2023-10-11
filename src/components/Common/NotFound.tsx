@@ -2,14 +2,14 @@
 import React from 'react';
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { TEACHER_DASHBOARD, STUDENT_DASHBOARD } from "../../constants/routes";
+import { DASHBOARD } from "../../constants/routes";
 
 type NotFoundProps = {
-  role?: "TEACHER" | "STUDENT";
+  role?: "TEACHER" | "STUDENT" | "ADMIN";
 };
 
 const NotFound: React.FC<NotFoundProps> = ({ role }) => {
-  const dashboardPath = role === "TEACHER" ? TEACHER_DASHBOARD : STUDENT_DASHBOARD;
+  const dashboardPath = role === "TEACHER" ? DASHBOARD : DASHBOARD;
 
   return (
     <Container>
