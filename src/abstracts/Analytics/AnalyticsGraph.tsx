@@ -1,9 +1,8 @@
-import {
-  styled} from '@mui/material';
+import { styled } from "@mui/material";
 
-import { TasksAnalytics } from './TasksAnalytics';
+import { TasksAnalytics } from "./TasksAnalytics";
 
-export const DotPrimaryLight = styled('span')(
+export const DotPrimaryLight = styled("span")(
   ({ theme }) => `
     border-radius: 22px;
     background: ${theme.colors.primary.lighter};
@@ -14,7 +13,7 @@ export const DotPrimaryLight = styled('span')(
 `
 );
 
-export const DotPrimary = styled('span')(
+export const DotPrimary = styled("span")(
   ({ theme }) => `
     border-radius: 22px;
     background: ${theme.colors.primary.main};

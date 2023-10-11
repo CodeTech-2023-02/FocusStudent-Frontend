@@ -1,7 +1,7 @@
-import React, { lazy, Suspense } from 'react';
-import { ApexOptions } from 'apexcharts';
+import React, { lazy, Suspense } from "react";
+import { ApexOptions } from "apexcharts";
 
-const Chart = lazy(() => import('react-apexcharts'));
+const Chart = lazy(() => import("react-apexcharts"));
 
 interface DynamicChartProps {
   options: ApexOptions;
@@ -10,7 +10,12 @@ interface DynamicChartProps {
   height: number;
 }
 
-export const DynamicChart: React.FC<DynamicChartProps> = ({ options, series, type, height }) => {
+export const DynamicChart: React.FC<DynamicChartProps> = ({
+  options,
+  series,
+  type,
+  height,
+}) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Chart options={options} series={series} type={type} height={height} />

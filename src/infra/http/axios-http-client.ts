@@ -1,5 +1,10 @@
 import axios from "axios";
-import { HttpClient, HttpRequest, HttpResponse, HttpStatusCode } from "../interfaces";
+import {
+  HttpClient,
+  HttpRequest,
+  HttpResponse,
+  HttpStatusCode,
+} from "../interfaces";
 
 class AxiosHttpClient implements HttpClient {
   async request<T, R>(data: HttpRequest<T>): Promise<HttpResponse<R>> {
@@ -15,4 +20,3 @@ class AxiosHttpClient implements HttpClient {
 const axiosHttpClient = new AxiosHttpClient();
 
 export { AxiosHttpClient, axiosHttpClient };
-

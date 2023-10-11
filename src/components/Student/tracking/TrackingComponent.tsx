@@ -7,7 +7,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Typography
+  Typography,
 } from "@mui/material";
 import * as faceapi from "face-api.js";
 import React, { useEffect, useRef, useState } from "react";
@@ -23,7 +23,7 @@ const TrackingComponent: React.FC = () => {
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const videoDevices = devices.filter(
-        (device) => device.kind === "videoinput",
+        (device) => device.kind === "videoinput"
       );
       setDeviceList(videoDevices);
     });
@@ -74,7 +74,7 @@ const TrackingComponent: React.FC = () => {
 
         const resizedDetections = faceapi.resizeResults(
           detections,
-          displaySize,
+          displaySize
         );
         canvasEl
           .getContext("2d")
@@ -120,46 +120,60 @@ const TrackingComponent: React.FC = () => {
 
   return (
     <Container>
-    <Typography variant="h2" component="h2" gutterBottom style={{ paddingBottom: "40px", paddingTop: "20px"}}>
-      Detección de Rostro con Análisis de Emociones
-    </Typography>
-    <Grid container direction="column" alignItems="center" justifyContent="center">
-      <Grid item xs={12} style={{ marginBottom: "5px" }}>
-        <FormControl variant="outlined">
-          <InputLabel id="camera-select-label">Seleccione Cámara</InputLabel>
-          <Select
-            labelId="camera-select-label"
-            value={selectedDevice}
-            onChange={handleCameraChange}
-            label="Seleccione Cámara"
+      <Typography
+        variant="h2"
+        component="h2"
+        gutterBottom
+        style={{ paddingBottom: "40px", paddingTop: "20px" }}
+      >
+        Detección de Rostro con Análisis de Emociones
+      </Typography>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid item xs={12} style={{ marginBottom: "5px" }}>
+          <FormControl variant="outlined">
+            <InputLabel id="camera-select-label">Seleccione Cámara</InputLabel>
+            <Select
+              labelId="camera-select-label"
+              value={selectedDevice}
+              onChange={handleCameraChange}
+              label="Seleccione Cámara"
+            >
+              {deviceList.map((device, index) => (
+                <MenuItem key={index} value={device.deviceId}>
+                  {device.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} style={{ marginBottom: "5px", padding: "10px" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleStartClick}
           >
-            {deviceList.map((device, index) => (
-              <MenuItem key={index} value={device.deviceId}>
-                {device.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            Iniciar
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleStopClick}
+            style={{ marginLeft: "10px" }}
+          >
+            Detener
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <video ref={videoRef} width="720" height="560" autoPlay muted></video>
+          {/*<canvas ref={canvasRef} width="720" height="560"></canvas>*/}
+        </Grid>
       </Grid>
-      <Grid item xs={12} style={{ marginBottom: "5px", padding: "10px" }}>
-        <Button variant="contained" color="primary" onClick={handleStartClick}>
-          Iniciar
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleStopClick}
-          style={{ marginLeft: "10px" }}
-        >
-          Detener
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <video ref={videoRef} width="720" height="560" autoPlay muted></video>
-        {/*<canvas ref={canvasRef} width="720" height="560"></canvas>*/}
-      </Grid>
-    </Grid>
-  </Container>
+    </Container>
   );
 };
 

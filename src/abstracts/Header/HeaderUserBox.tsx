@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
 import {
   Avatar,
@@ -11,15 +11,15 @@ import {
   ListItemText,
   Popover,
   Typography,
-  lighten
-} from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+  lighten,
+} from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
-import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import { styled } from '@mui/material/styles';
-import { useAuth } from '../../state/AuthContext';
+import AccountBoxTwoToneIcon from "@mui/icons-material/AccountBoxTwoTone";
+import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
+import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
+import { styled } from "@mui/material/styles";
+import { useAuth } from "../../state/AuthContext";
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -57,12 +57,12 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const localStorageData = localStorage.getItem('currentUser');
+  const localStorageData = localStorage.getItem("currentUser");
   const storedUser = localStorageData ? JSON.parse(localStorageData) : {};
   const user = {
-    name: storedUser.name || 'Usuario',
-    avatar: 'images/gaa.png',
-    jobtitle: storedUser.role == 'TEACHER' ? 'Profesor' : 'Estudiante'
+    name: storedUser.name || "Usuario",
+    avatar: "images/gaa.png",
+    jobtitle: storedUser.role == "TEACHER" ? "Profesor" : "Estudiante",
   };
 
   const auth = useAuth();
@@ -106,12 +106,12 @@ function HeaderUserbox() {
         onClose={handleClose}
         open={isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
@@ -134,7 +134,7 @@ function HeaderUserbox() {
       </List>*/}
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth onClick={handleLogout}> 
+          <Button color="primary" fullWidth onClick={handleLogout}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

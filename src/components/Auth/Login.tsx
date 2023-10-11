@@ -100,9 +100,11 @@ const Login = () => {
             () => {
               successModal.closeModal();
             },
-            () => { },
+            () => {},
             "Ocurrió un error",
-            error.response.data.status === HttpStatusCode.unauthorized ? "Credenciales inválidas" : error.response.data.message
+            error.response.data.status === HttpStatusCode.unauthorized
+              ? "Credenciales inválidas"
+              : error.response.data.message
           );
         },
       }
@@ -167,7 +169,10 @@ const Login = () => {
             <Grid item mt={4}>
               <Typography variant="body2">
                 ¿No tienes una cuenta?
-                <Link onClick={() => navigate('/register')}> REGISTRATE AQUÍ</Link>
+                <Link onClick={() => navigate("/register")}>
+                  {" "}
+                  REGISTRATE AQUÍ
+                </Link>
               </Typography>
             </Grid>
 

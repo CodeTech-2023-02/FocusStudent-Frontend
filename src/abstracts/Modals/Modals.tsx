@@ -12,17 +12,17 @@ const typographyStyles = {
   fontSize: "2rem",
 };
 
-const GenericModal: React.FC<BaseModalProps & { message?: string, actions: React.ReactNode }> = ({
-  children,
-  message,
-  actions,
-  ...props
-}) => {
+const GenericModal: React.FC<
+  BaseModalProps & { message?: string; actions: React.ReactNode }
+> = ({ children, message, actions, ...props }) => {
   return (
-    <SimpleDialog isscroll={false} title={props.title}  {...props} actions={actions}>
-      {children && (
-  <Typography sx={typographyStyles}>{children}</Typography>
-)}
+    <SimpleDialog
+      isscroll={false}
+      title={props.title}
+      {...props}
+      actions={actions}
+    >
+      {children && <Typography sx={typographyStyles}>{children}</Typography>}
 
       {message && (
         <Typography
@@ -42,7 +42,9 @@ const GenericModal: React.FC<BaseModalProps & { message?: string, actions: React
   );
 };
 
-export const OkModal: React.FC<BaseModalProps & { message?: string }> = (props) => (
+export const OkModal: React.FC<BaseModalProps & { message?: string }> = (
+  props
+) => (
   <GenericModal
     {...props}
     actions={
@@ -58,11 +60,13 @@ export const OkModal: React.FC<BaseModalProps & { message?: string }> = (props) 
   />
 );
 
-export const ConfirmationModal: React.FC<BaseModalProps & { handleOnConfirm: () => void; message?: string; isProcessing: boolean }> = ({
-  handleOnConfirm,
-  isProcessing,
-  ...props
-}) => (
+export const ConfirmationModal: React.FC<
+  BaseModalProps & {
+    handleOnConfirm: () => void;
+    message?: string;
+    isProcessing: boolean;
+  }
+> = ({ handleOnConfirm, isProcessing, ...props }) => (
   <GenericModal
     {...props}
     actions={

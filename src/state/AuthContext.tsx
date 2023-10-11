@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { ILoginResponse } from "../domain/auth/constants/interfaces";
 
 interface AuthContextProps {
@@ -21,12 +27,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<ILoginResponse | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser');
+    const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       setCurrentUser(JSON.parse(storedUser));
     }
-}, []);
-
+  }, []);
 
   const login = (user: ILoginResponse) => {
     localStorage.setItem("token", user.token);

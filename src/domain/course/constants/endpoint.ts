@@ -1,3 +1,3 @@
 export enum CourseEndpoints {
-    course = '/course',
-}  
+  course = "/course",
+}

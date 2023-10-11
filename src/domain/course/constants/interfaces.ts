@@ -1,11 +1,9 @@
-
 export interface ICreateEditCourse {
-    year:        number;
-    name:        string;
-    description: string;
+  year: number;
+  name: string;
+  description: string;
 }
 
-
 export interface IRegisterResponse {
-    message: string;
+  message: string;
 }

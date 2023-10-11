@@ -1,8 +1,17 @@
 import { axiosHttpClient } from "../../../infra/http/axios-http-client";
 import { UtilsHttp } from "../../../infra/http/utils";
-import { HttpClient, HttpMethod, HttpResponse } from "../../../infra/interfaces";
+import {
+  HttpClient,
+  HttpMethod,
+  HttpResponse,
+} from "../../../infra/interfaces";
 import { AuthEndpoints } from "../constants/endpoint";
-import { ILogin, ILoginResponse, IRegister, IRegisterResponse } from "../constants/interfaces";
+import {
+  ILogin,
+  ILoginResponse,
+  IRegister,
+  IRegisterResponse,
+} from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 
@@ -14,7 +23,7 @@ class AuthRepository {
   constructor(private httpClient: HttpClient) {}
 
   login = (data: ILogin): Promise<HttpResponse<ILoginResponse>> => {
-    const url = buildUrl(AuthEndpoints.user,AuthEndpoints.login);
+    const url = buildUrl(AuthEndpoints.user, AuthEndpoints.login);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.POST,
@@ -25,7 +34,7 @@ class AuthRepository {
   };
 
   register = (data: IRegister): Promise<HttpResponse<IRegisterResponse>> => {
-    const url = buildUrl(AuthEndpoints.user,AuthEndpoints.register);
+    const url = buildUrl(AuthEndpoints.user, AuthEndpoints.register);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.POST,

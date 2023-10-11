@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
+import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import {
   Box,
   Divider,
@@ -10,17 +10,14 @@ import {
   alpha,
   lighten,
   styled,
-  useTheme
-} from '@mui/material';
+  useTheme,
+} from "@mui/material";
 
-import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 
-
-
-
-import { SidebarContext } from '../../contexts/SidebarContext';
-import HeaderButtons from './HeaderButtons';
-import HeaderUserbox from './HeaderUserBox';
+import { SidebarContext } from "../../contexts/SidebarContext";
+import HeaderButtons from "./HeaderButtons";
+import HeaderUserbox from "./HeaderUserBox";
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -51,7 +48,7 @@ function Header() {
       alignItems="center"
       sx={{
         boxShadow:
-          theme.palette.mode === 'dark'
+          theme.palette.mode === "dark"
             ? `0 1px 0 ${alpha(
                 lighten(theme.colors.primary.main, 0.7),
                 0.15
@@ -62,7 +59,7 @@ function Header() {
               )}, 0px 5px 22px -4px ${alpha(
                 theme.colors.alpha.black[100],
                 0.1
-              )}`
+              )}`,
       }}
     >
       <Stack
@@ -70,8 +67,7 @@ function Header() {
         divider={<Divider orientation="vertical" flexItem />}
         alignItems="center"
         spacing={2}
-      >
-      </Stack>
+      ></Stack>
       <Box display="flex" alignItems="center">
         <HeaderButtons />
         <HeaderUserbox />
@@ -79,7 +75,7 @@ function Header() {
           component="span"
           sx={{
             ml: 2,
-            display: { lg: 'none', xs: 'inline-block' }
+            display: { lg: "none", xs: "inline-block" },
           }}
         >
           <Tooltip arrow title="Toggle Menu">

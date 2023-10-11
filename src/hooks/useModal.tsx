@@ -4,10 +4,13 @@ const useModal = (initialState = false) => {
   const [isOpen, setIsOpen] = useState(initialState);
   const [message, setMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
-  const [handleOnConfirm, setHandleOnConfirm] = useState<(() => void) | null>(null);
-  const [handleOnModalClose, setHandleOnModalClose] = useState<(() => void) | null>(null);
+  const [handleOnConfirm, setHandleOnConfirm] = useState<(() => void) | null>(
+    null
+  );
+  const [handleOnModalClose, setHandleOnModalClose] = useState<
+    (() => void) | null
+  >(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
 
   const startProcessing = () => {
     setIsProcessing(true);

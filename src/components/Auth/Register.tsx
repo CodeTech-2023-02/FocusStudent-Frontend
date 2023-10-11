@@ -174,7 +174,6 @@ const Register = () => {
             </Typography>
           </Grid>
           <form onSubmit={handleSubmit(onSubmit)}>
-            
             {fieldNames.map((fieldName) => (
               <Grid key={fieldName} item style={{ width: "20rem" }} mt={2}>
                 <Controller

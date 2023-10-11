@@ -3,12 +3,10 @@ import Performance from "../../abstracts/Analytics/Performance";
 import { TasksAnalytics } from "../../abstracts/Analytics/TasksAnalytics";
 import useModal from "../../hooks/useModal";
 
-
 const TeacherDashboard: React.FC = () => {
   const theme = useTheme();
   const confirmationDeleteModal = useModal();
   const successModal = useModal();
-
 
   const handleDelete = () => {
     confirmationDeleteModal.openModal(
@@ -19,7 +17,6 @@ const TeacherDashboard: React.FC = () => {
           confirmationDeleteModal.stopProcessing();
           confirmationDeleteModal.closeModal();
         }, 2000);
-
       },
       () => {
         console.log("Modal cerrado");
@@ -29,30 +26,26 @@ const TeacherDashboard: React.FC = () => {
     );
   };
 
-
   const handleSuccess = () => {
     successModal.openModal(
       () => {
         successModal.closeModal();
       },
-      () => { },
+      () => {},
       "Operación exitosa",
       "La operación se realizó con éxito"
     );
   };
 
-
   return (
     <div>
-
       <Box
         p={4}
         sx={{
-          background: `${theme.colors.alpha.black[5]}`
+          background: `${theme.colors.alpha.black[5]}`,
         }}
       >
         <Grid container spacing={2}>
-
           <Grid item xs={12} sm={6} md={8}>
             <TasksAnalytics />
           </Grid>
@@ -61,14 +54,8 @@ const TeacherDashboard: React.FC = () => {
           </Grid>
         </Grid>
       </Box>
-      
-
-
-      </div>
-
-
+    </div>
   );
 };
 
 export default TeacherDashboard;
-

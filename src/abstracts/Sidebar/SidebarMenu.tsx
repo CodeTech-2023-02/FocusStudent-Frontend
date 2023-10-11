@@ -1,21 +1,23 @@
+import { useContext } from "react";
 
-import { useContext } from 'react';
+import { Box, Button, List, ListItem, alpha, styled } from "@mui/material";
 
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
-  Box,
-  Button,
-  List,
-  ListItem,
-  alpha,
-  styled
-} from '@mui/material';
-
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { STUDENT_COURSE, STUDENT_DASHBOARD, STUDENT_POLICY, STUDENT_REPORTS, STUDENT_TRACKING, TEACHER_COURSE, TEACHER_DASHBOARD, TEACHER_POLICY, TEACHER_REPORT, TEACHER_STUDENTS } from '../../constants/routes';
-import { SidebarContext } from '../../contexts/SidebarContext';
-import { useAuth } from '../../state/AuthContext';
-import { Roles } from '../../constants/roles';
-
+  STUDENT_COURSE,
+  STUDENT_DASHBOARD,
+  STUDENT_POLICY,
+  STUDENT_REPORTS,
+  STUDENT_TRACKING,
+  TEACHER_COURSE,
+  TEACHER_DASHBOARD,
+  TEACHER_POLICY,
+  TEACHER_REPORT,
+  TEACHER_STUDENTS,
+} from "../../constants/routes";
+import { SidebarContext } from "../../contexts/SidebarContext";
+import { useAuth } from "../../state/AuthContext";
+import { Roles } from "../../constants/roles";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -68,7 +70,7 @@ const SubMenuWrapper = styled(Box)(
 
           .MuiButton-startIcon,
           .MuiButton-endIcon {
-            transition: ${theme.transitions.create(['color'])};
+            transition: ${theme.transitions.create(["color"])};
 
             .MuiSvgIcon-root {
               font-size: inherit;
@@ -132,8 +134,8 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-                  'transform',
-                  'opacity'
+                  "transform",
+                  "opacity",
                 ])};
                 width: 6px;
                 height: 6px;
@@ -161,58 +163,58 @@ const SubMenuWrapper = styled(Box)(
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
-  const location = useLocation(); 
+  const location = useLocation();
   const currentRoute = location.pathname;
 
   const auth = useAuth();
-  const currentUserRole = auth?.currentUser?.role || '';
-  
+  const currentUserRole = auth?.currentUser?.role || "";
+
   const studentRoutes = [
-    { path: STUDENT_DASHBOARD, label: 'Dashboard' },
-    { path: STUDENT_TRACKING, label: 'Tracking' },
-    { path: STUDENT_COURSE, label: 'Cursos' },
-    { path: STUDENT_REPORTS, label: 'Reportes' },
-    { path: STUDENT_POLICY, label: 'Políticas' }
+    { path: STUDENT_DASHBOARD, label: "Dashboard" },
+    { path: STUDENT_TRACKING, label: "Tracking" },
+    { path: STUDENT_COURSE, label: "Cursos" },
+    { path: STUDENT_REPORTS, label: "Reportes" },
+    { path: STUDENT_POLICY, label: "Políticas" },
   ];
-  
+
   const teacherRoutes = [
-    { path: TEACHER_DASHBOARD, label: 'Dashboard' },
-    { path: TEACHER_COURSE, label: 'Cursos' },
-    { path: TEACHER_STUDENTS, label: 'Estudiantes' },
-    { path: TEACHER_REPORT, label: 'Reportes' },
-    { path: TEACHER_POLICY, label: 'Políticas' }
+    { path: TEACHER_DASHBOARD, label: "Dashboard" },
+    { path: TEACHER_COURSE, label: "Cursos" },
+    { path: TEACHER_STUDENTS, label: "Estudiantes" },
+    { path: TEACHER_REPORT, label: "Reportes" },
+    { path: TEACHER_POLICY, label: "Políticas" },
   ];
-  
+
   let routes: any[] = [];
   if (currentUserRole.toUpperCase() === Roles.STUDENT) {
     routes = studentRoutes;
   } else if (currentUserRole.toUpperCase() === Roles.TEACHER) {
     routes = teacherRoutes;
   }
-  
+
   return (
     <MenuWrapper>
-    <List component="div">
-      <SubMenuWrapper>
-        <List component="div">
-          {routes.map(route => (
-            <ListItem key={route.path} component="div">
-              <RouterLink to={route.path}>
-                <Button
-                  className={currentRoute === route.path ? 'active' : ''}
-                  disableRipple
-                  component="a"
-                  onClick={closeSidebar}
-                >
-                  {route.label}
-                </Button>
-              </RouterLink>
-            </ListItem>
-          ))}
-        </List>
-      </SubMenuWrapper>
-    </List>
-  </MenuWrapper>
+      <List component="div">
+        <SubMenuWrapper>
+          <List component="div">
+            {routes.map((route) => (
+              <ListItem key={route.path} component="div">
+                <RouterLink to={route.path}>
+                  <Button
+                    className={currentRoute === route.path ? "active" : ""}
+                    disableRipple
+                    component="a"
+                    onClick={closeSidebar}
+                  >
+                    {route.label}
+                  </Button>
+                </RouterLink>
+              </ListItem>
+            ))}
+          </List>
+        </SubMenuWrapper>
+      </List>
+    </MenuWrapper>
   );
 }
 

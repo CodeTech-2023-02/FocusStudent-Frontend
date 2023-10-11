@@ -1,19 +1,15 @@
-
-
 export class UtilsHttp {
-  
   static getAccessToken() {
-    return "token"
+    return "token";
   }
 
   static getRoleUser(): string {
-    return "user"
+    return "user";
   }
 
   static BaseHeaders() {
     return {
-      Authorization: `Bearer ${this.getAccessToken()}`, 
+      Authorization: `Bearer ${this.getAccessToken()}`,
     };
   }
-
 }
