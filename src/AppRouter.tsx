@@ -19,12 +19,15 @@ import {
   TEACHER_POLICY,
   TEACHER_REPORT,
   TEACHER_STUDENTS,
+  UNAUTHORIZED,
 } from "./constants/routes";
 import { useAuth } from "./state/AuthContext";
 import ThemeProvider from "./theme/ThemeProvider";
 import ProtectedElement from "./utils/ProtectedElement";
 import SidebarLayout from "./abstracts/Sidebar/SidebarLayout";
 import Register from "./components/Auth/Register";
+import Unauthorized from "./components/Common/Unauthorized";
+import NotFound from "./components/Common/NotFound";
 
 const AppRouter: React.FC = () => {
   const auth = useAuth();
@@ -83,6 +86,7 @@ const AppRouter: React.FC = () => {
               )
             }
           />
+          <Route path="*" element={<NotFound role={isLoggedIn ? isLoggedIn.role : undefined} />} />
 
           {/* SidebarLayout wrapping the nested routes */}
           <Route element={<SidebarLayout />}>
@@ -167,6 +171,7 @@ const AppRouter: React.FC = () => {
                 </ProtectedElement>
               }
             />
+            <Route path={UNAUTHORIZED} element={<Unauthorized />} />
           </Route>
         </Routes>
       </BrowserRouter>

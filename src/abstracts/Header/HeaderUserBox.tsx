@@ -70,7 +70,6 @@ function HeaderUserbox() {
   const handleLogout = () => {
     if (auth) {
       auth.logout();
-      // Aquí también puedes agregar cualquier otra lógica adicional que desees ejecutar cuando el usuario cierre sesión
     }
   };
 
