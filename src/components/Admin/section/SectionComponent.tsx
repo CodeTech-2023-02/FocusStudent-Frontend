@@ -11,6 +11,7 @@ import useModal from "../../../hooks/useModal";
 import SectionCard from "./Card/SectionCard";
 import { SectionFormDialog } from "./Dialogs/SectionFormDialog";
 import { ISectionForm } from "./ISectionForm";
+import { useDeleteSection, useGetAllSections } from "../../../domain/section/services/section-services";
 
 const SectionComponent: React.FC = () => {
   const confirmationDeleteModal = useModal();
@@ -18,9 +19,9 @@ const SectionComponent: React.FC = () => {
   const [courses, setCourses] = React.useState<ISectionForm[]>([]);
 
 
-  
-  const getCourseMutation = useGetAllCourses();
 
+  const getSectionMutation = useGetAllSections();
+  const deleteSectionMutation = useDeleteSection();
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
@@ -28,13 +29,13 @@ const SectionComponent: React.FC = () => {
     ISectionForm | undefined
   >();
 
-  const [dialogMode, setDialogMode] = React.useState<"create" | "edit">(
+  const [dialogMode, setDialogMode] = React.useState<"create" | "edit" | "config">(
     "create"
   );
 
   const fetchCourses = () => {
     setLoading(true);
-    getCourseMutation.mutate(undefined, {
+    getSectionMutation.mutate(undefined, {
       onSuccess: (response) => {
         setCourses(response);
         setLoading(false);
@@ -45,36 +46,82 @@ const SectionComponent: React.FC = () => {
       },
     });
   };
-  
+
   React.useEffect(() => {
     fetchCourses();
   }, []);
-  
+
 
   const handleCreateCourse = () => {
     setDialogMode("create");
     setSelectedCourse(undefined);
-    handleOpenDialog();
+    setOpenDialog(true);
   };
 
   const handleConfig = (course: ISectionForm) => {
-    setDialogMode("edit");
-    handleOpenDialog(course);
+    setDialogMode("config");
+    setSelectedCourse(course);
+    setOpenDialog(true);
   };
 
-  const handleOpenDialog = (course?: ISectionForm) => {
-    setSelectedCourse(course || undefined);
+  const handleEdit = (course: ISectionForm) => {
+    setDialogMode("edit");
+    setSelectedCourse(course);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedCourse(undefined);
+    setDialogMode("create");
   };
 
+  const handleDelete = (course: ISectionForm) => {
+    if (course.id === undefined) {
+      console.error("El ID de la sección no está definido");
+      return;
+    }
+    confirmationDeleteModal.openModal(
+      () => {
+        confirmationDeleteModal.startProcessing();
+        deleteSectionMutation.mutate(course.id!, {
+          onSuccess: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => { },
+              "Operación exitosa",
+              "Sección eliminada con éxito"
+            );
+            confirmationDeleteModal.stopProcessing();
+            confirmationDeleteModal.closeModal();
+            fetchCourses();
+          },
+          onError: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => { },
+              "Ocurrió un error",
+              "No se pudo eliminar la sección"
+            );
+            confirmationDeleteModal.stopProcessing();
+            confirmationDeleteModal.closeModal();
+          },
+        });
+      },
+      () => {
+        console.log("Modal cerrado");
+      },
+      "Eliminar la sección",
+      "¿Estás seguro de que deseas eliminar la sección?"
+    );
+  }
 
   const handleSubmitCourse = (data: ISectionForm) => {
-    
+
   };
 
   return (
@@ -93,6 +140,8 @@ const SectionComponent: React.FC = () => {
                 <SectionCard
                   course={course}
                   config={handleConfig}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
                 />
               </Grid>
             ))
@@ -103,7 +152,9 @@ const SectionComponent: React.FC = () => {
           open={openDialog}
           onClose={handleCloseDialog}
           onSubmit={handleSubmitCourse}
-          mode={dialogMode} 
+          mode={dialogMode}
+          refetch={fetchCourses}
+          selectedCourse={selectedCourse}
         />
         <ConfirmationModal
           height={230}

@@ -4,15 +4,20 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
 import { ISectionForm } from "../ISectionForm";
-
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 interface SectionCardProps {
   course: ISectionForm;
   config: (course: ISectionForm) => void;
+  onEdit: (course: ISectionForm) => void;
+  onDelete: (course: ISectionForm) => void;
 }
 
 const SectionCard: React.FC<SectionCardProps> = ({
   course,
-  config
+  config,
+  onEdit,
+  onDelete,
 }) => {
   const [showActions, setShowActions] = React.useState(false);
   
@@ -39,7 +44,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
             direction="column"
             justifyContent="center"
           >
-            <Box textAlign="center">Año: {course.year}</Box>
             <Box textAlign="center">Nombre: {course.name}</Box>
           </Grid>
           <Grid
@@ -52,6 +56,12 @@ const SectionCard: React.FC<SectionCardProps> = ({
             {(
               showActions ? (
                 <>
+                <IconButton color="primary" onClick={() => onEdit(course)}>
+                    <EditIcon sx={{ fontSize: 22 }} />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => onDelete(course)}>
+                    <DeleteIcon sx={{ fontSize: 22 }} />
+                  </IconButton>
                   <IconButton color="primary" onClick={() => config(course)}>
                     <SettingsIcon sx={{ fontSize: 22 }} />
                   </IconButton>

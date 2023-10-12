@@ -91,6 +91,7 @@ const StudentComponent: React.FC = () => {
           <Grid item xs={12} sm={6} md={9}>
             <TextField
               label="Buscar por apellido"
+              inputProps={{ autocomplete: "off" }}
               fullWidth
               style={{ height: 50 }}
             />

@@ -96,6 +96,7 @@ export const CourseFormDialog: React.FC<CourseFormDialogProps> = ({
                   helperText={errors.name?.message}
                   error={!!errors.name}
                   fullWidth
+                  inputProps={{ autocomplete: "off" }}
                 />
               )}
             />
@@ -111,6 +112,7 @@ export const CourseFormDialog: React.FC<CourseFormDialogProps> = ({
                   error={!!errors.year}
                   label="Año"
                   fullWidth
+                  inputProps={{ autocomplete: "off" }}
                 />
               )}
             />
@@ -126,6 +128,7 @@ export const CourseFormDialog: React.FC<CourseFormDialogProps> = ({
                   error={!!errors.description}
                   label="Descripción breve de la clase"
                   fullWidth
+                  inputProps={{ autocomplete: "off" }}
                   multiline
                 />
               )}
