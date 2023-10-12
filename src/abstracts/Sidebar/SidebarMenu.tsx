@@ -9,6 +9,7 @@ import {
   DASHBOARD,
   POLICY,
   REPORT,
+  SECTION,
   STUDENTS,
   STUDENT_REPORTS,
   STUDENT_TRACKING
@@ -173,7 +174,11 @@ function SidebarMenu() {
     { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },
   ];
-
+  
+  const adminRoutes = [
+    { path: SECTION, label: "Secciones" },
+  ];
+  
 
   const studentRoutes = [
     { path: DASHBOARD, label: "Dashboard" },
@@ -191,11 +196,16 @@ function SidebarMenu() {
   ) {
     routes = studentRoutes;
   } else if (
-    currentUserRole.toUpperCase() === Roles.TEACHER ||
-    currentUserRole.toUpperCase() === Roles.ADMIN
+    currentUserRole.toUpperCase() === Roles.TEACHER
   ) {
     routes = teacherAdminRoutes;
   }
+  else if (currentUserRole.toUpperCase() === Roles.ADMIN) {
+    routes = [teacherAdminRoutes[0], adminRoutes[0], ...teacherAdminRoutes.slice(1)];
+  }
+  
+  
+
 
   return (
     <MenuWrapper>

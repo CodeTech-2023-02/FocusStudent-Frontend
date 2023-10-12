@@ -19,6 +19,7 @@ import {
   REPORT,
   STUDENTS,
   UNAUTHORIZED,
+  SECTION,
 } from "./constants/routes";
 import { useAuth } from "./state/AuthContext";
 import ThemeProvider from "./theme/ThemeProvider";
@@ -27,6 +28,7 @@ import SidebarLayout from "./abstracts/Sidebar/SidebarLayout";
 import Support from "./components/Auth/Support";
 import Unauthorized from "./components/Common/Unauthorized";
 import NotFound from "./components/Common/NotFound";
+import SectionComponent from "./components/Admin/section/SectionComponent";
 
 const AppRouter: React.FC = () => {
   const auth = useAuth();
@@ -101,6 +103,14 @@ const AppRouter: React.FC = () => {
               element={
                 <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <CourseComponent />
+                </ProtectedElement>
+              }
+            />
+            <Route
+              path={SECTION}
+              element={
+                <ProtectedElement roles={["ADMIN"]}>
+                  <SectionComponent />
                 </ProtectedElement>
               }
             />
