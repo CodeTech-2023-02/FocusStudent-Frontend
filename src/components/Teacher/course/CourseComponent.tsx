@@ -12,6 +12,7 @@ import {
   useGetAllCourses,
 } from "../../../domain/course/services/course-service";
 import { useAuth } from "../../../state/AuthContext";
+import { useGetAllCoursesSectionByTeacher } from "../../../domain/course_section/services/course_section-service";
 
 const CourseComponent: React.FC = () => {
   const confirmationDeleteModal = useModal();
@@ -23,7 +24,7 @@ const CourseComponent: React.FC = () => {
   const editCourseMutation = useEditCourse();
   const deleteCourseMutation = useDeleteCourse();
   const getCourseMutation = useGetAllCourses();
-
+  const getAllCoursesSectionByTeacherMutation = useGetAllCoursesSectionByTeacher();
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
@@ -40,17 +41,31 @@ const CourseComponent: React.FC = () => {
 
   const fetchCourses = () => {
     setLoading(true);
-    getCourseMutation.mutate(undefined, {
-      onSuccess: (response) => {
-        setCourses(response);
-        setLoading(false);
-      },
-      onError: (error) => {
-        console.error("Error al obtener los cursos:", error);
-        setLoading(false);
-      },
-    });
+    if (role === "TEACHER" && currentUser) {
+      getAllCoursesSectionByTeacherMutation.mutate(currentUser.id, {
+        onSuccess: (response) => {
+          setCourses(response.map(item => item.course));
+          setLoading(false);
+        },
+        onError: (error) => {
+          console.error("Error al obtener los cursos por maestro:", error);
+          setLoading(false);
+        },
+      });
+    } else {
+      getCourseMutation.mutate(undefined, {
+        onSuccess: (response) => {
+          setCourses(response);
+          setLoading(false);
+        },
+        onError: (error) => {
+          console.error("Error al obtener los cursos:", error);
+          setLoading(false);
+        },
+      });
+    }
   };
+  
   
   React.useEffect(() => {
     fetchCourses();

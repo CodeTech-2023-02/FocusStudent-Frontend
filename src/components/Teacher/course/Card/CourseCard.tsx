@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import { ICourseForm } from "../ICourseForm";
+import CourseDrawer from "../Drawer/CourseDrawer";
 
 interface CourseCardProps {
   course: ICourseForm;
@@ -84,13 +85,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </Grid>
       </CardContent>
       {role === 'TEACHER' && (
-        <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <h1>Hola</h1>
-        </Drawer>
+        <CourseDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
       )}
     </Card>
   );

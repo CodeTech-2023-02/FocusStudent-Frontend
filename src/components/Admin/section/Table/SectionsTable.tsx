@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import { IconButton, MenuItem, Select, TableCell, TableRow } from '@mui/material';
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from 'react-hook-form';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { Autocomplete, IconButton, TableCell, TableRow, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from "yup";
 import { Table } from '../../../../abstracts/Table/Table';
+import { IGetAllResponse } from '../../../../domain/course/constants/interfaces';
+import { useGetAllCourses } from '../../../../domain/course/services/course-service';
+import { ITeacher } from '../../../../domain/teacher/constants/interfaces';
+import { useGetAllTeachers } from '../../../../domain/teacher/services/teacher-service';
 
 interface Entry {
     courseId: number;
-    sectionId: number;
     teacherId: number;
 }
 
 const schema = yup.object().shape({
     courseId: yup.number().min(1).required(),
-    sectionId: yup.number().min(1).required(),
     teacherId: yup.number().min(1).required(),
 });
 
@@ -28,16 +30,35 @@ export const SectionsTable: React.FC = () => {
     const { control, getValues, reset, formState: { } } = useForm<Entry>({
         resolver: yupResolver(schema),
     });
+    const [teachers, setTeachers] = useState<ITeacher[]>([]);
+    const [courses, setCourses] = useState<IGetAllResponse[]>([]);
+
+    const getAllTeachers = useGetAllTeachers();
+    const getAllCourses = useGetAllCourses();
 
     const handleAdd = () => {
         const values = getValues();
-    
-        if (values.courseId && values.sectionId && values.teacherId) {
+
+        if (values.courseId && values.teacherId) {
             setData(prevData => [...prevData, values]);
             reset();
         }
     };
-    
+
+    React.useEffect(() => {
+        getAllTeachers.mutate();
+        getAllCourses.mutate();
+    }, []);
+
+    React.useEffect(() => {
+        if (getAllTeachers.data) {
+            setTeachers(getAllTeachers.data);
+        }
+        if (getAllCourses.data) {
+            setCourses(getAllCourses.data);
+        }
+    }, [getAllTeachers.data, getAllCourses.data]);
+
 
     const handleEdit = (index: number) => {
         const values = getValues();
@@ -62,12 +83,21 @@ export const SectionsTable: React.FC = () => {
         setData(newData);
     };
 
+    const getCourseNameById = (courseId: number) => {
+        const course = courses.find(c => c.id === courseId);
+        return course ? course.name : '';
+    };
+
+    const getTeacherNameById = (teacherId: number) => {
+        const teacher = teachers.find(t => t.id === teacherId);
+        return teacher ? teacher.user.names : '';
+    };
+
     return (
         <>
             <Table
                 cells={[
                     { id: 'course', label: 'Curso' },
-                    { id: 'section', label: 'Seccion' },
                     { id: 'teacher', label: 'Profesor' },
                     { id: 'action', label: 'Acción' }
                 ]}
@@ -78,19 +108,36 @@ export const SectionsTable: React.FC = () => {
                 withPagination={false}
             >
                 <TableRow>
-                    {['courseId', 'sectionId', 'teacherId'].map(name => (
+                    {['courseId', 'teacherId'].map(name => (
                         <TableCell key={name}>
                             <Controller
                                 name={name as keyof Entry}
                                 control={control}
-                                render={({ field }) => (
-                                    <Select {...field} fullWidth>
-                                        <MenuItem value={0}>Seleccione</MenuItem>
-                                        <MenuItem value={1}>Option 1</MenuItem>
-                                        <MenuItem value={2}>Option 2</MenuItem>
-                                    </Select>
-                                )}
+                                render={({ field }) => {
+                                    const [localValue, setLocalValue] = useState<{ id: number; name: string } | null>(null);
+
+                                    return (
+                                        <Autocomplete
+                                            value={localValue}
+                                            fullWidth
+                                            options={
+                                                name === 'courseId' ?
+                                                    courses.map(course => ({ id: course.id, name: course.name })) :
+                                                    teachers.map(teacher => ({ id: teacher.id, name: teacher.user.names }))
+                                            }
+                                            getOptionLabel={(option) => option.name}
+                                            renderInput={(params) =>
+                                                <TextField {...params} label={name === 'courseId' ? 'Curso' : 'Profesor'} fullWidth />
+                                            }
+                                            onChange={(_, newValue) => {
+                                                field.onChange(newValue?.id || "");
+                                                setLocalValue(newValue);
+                                            }}
+                                        />
+                                    );
+                                }}
                             />
+
                         </TableCell>
                     ))}
                     <TableCell>
@@ -101,24 +148,33 @@ export const SectionsTable: React.FC = () => {
                 </TableRow>
                 {data.map((entry, index) => (
                     <TableRow key={index}>
-                        {['courseId', 'sectionId', 'teacherId'].map(name => (
+                        {['courseId', 'teacherId'].map(name => (
                             <TableCell key={name}>
                                 {editingIndex === index ? (
-                                    <Select
+                                    <Autocomplete
+                                        value={
+                                            name === 'courseId' ?
+                                                courses.map(course => ({ id: course.id, name: course.name })).find(course => course.id === entry.courseId) || null :
+                                                teachers.map(teacher => ({ id: teacher.id, name: teacher.user.names })).find(teacher => teacher.id === entry.teacherId) || null
+                                        }
                                         fullWidth
-                                        value={entry[name as keyof Entry]}
-                                        onChange={(e) => {
+                                        options={
+                                            name === 'courseId' ?
+                                                courses.map(course => ({ id: course.id, name: course.name })) :
+                                                teachers.map(teacher => ({ id: teacher.id, name: teacher.user.names }))
+                                        }
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) =>
+                                            <TextField {...params} label={name === 'courseId' ? 'Curso' : 'Profesor'} fullWidth />
+                                        }
+                                        onChange={(_, newValue) => {
                                             const newData = [...data];
-                                            newData[index][name as keyof Entry] = Number(e.target.value);
+                                            newData[index][name as keyof Entry] = newValue?.id || 0;
                                             setData(newData);
                                         }}
-                                    >
-                                        <MenuItem value={0}>Seleccione</MenuItem>
-                                        <MenuItem value={1}>Option 1</MenuItem>
-                                        <MenuItem value={2}>Option 2</MenuItem>
-                                    </Select>
+                                    />
                                 ) : (
-                                    entry[name as keyof Entry]
+                                    name === 'courseId' ? getCourseNameById(entry.courseId) : getTeacherNameById(entry.teacherId)
                                 )}
                             </TableCell>
                         ))}

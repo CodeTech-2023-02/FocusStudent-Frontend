@@ -109,7 +109,7 @@ export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
     <SimpleDialog
       open={open}
       handleOnClose={handleClose}
-      title={mode === "edit" ? "Configurar Sección" : "Crear Sección"}
+      title={(mode === "create" ? "Crear" : mode === "edit" ? "Editar" : "Configurar") + " sección"}
       width={600}
       minHeight={500}
       height={(mode === "config" ? 500 : 260)}
