@@ -30,7 +30,7 @@ import Support from "./components/Auth/Support";
 import Unauthorized from "./components/Common/Unauthorized";
 import NotFound from "./components/Common/NotFound";
 import SectionComponent from "./components/Admin/section/SectionComponent";
-import LectionComponent from "./components/Teacher/lection/LectionComponent";
+import LectionComponent from "./components/Teacher/lesson/LessonComponent";
 
 const AppRouter: React.FC = () => {
   const auth = useAuth();

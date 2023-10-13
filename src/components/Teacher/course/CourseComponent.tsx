@@ -15,9 +15,10 @@ import { useAuth } from "../../../state/AuthContext";
 import { useGetAllCoursesSectionByTeacher } from "../../../domain/course_section/services/course_section-service";
 
 const CourseComponent: React.FC = () => {
-  const confirmationDeleteModal = useModal();
+  
   const [loading, setLoading] = React.useState(true);
   const [courses, setCourses] = React.useState<ICourseForm[]>([]);
+  const [idForLessons, setIdForLessons] = React.useState<number[]>([]);
 
 
   const createCourseMutation = useCreateCourse();
@@ -28,6 +29,7 @@ const CourseComponent: React.FC = () => {
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
+  const confirmationDeleteModal = useModal();
   const [selectedCourse, setSelectedCourse] = React.useState<
     ICourseForm | undefined
   >();
@@ -45,6 +47,7 @@ const CourseComponent: React.FC = () => {
       getAllCoursesSectionByTeacherMutation.mutate(currentUser.id, {
         onSuccess: (response) => {
           setCourses(response.map(item => item.course));
+          setIdForLessons(response.map(item => item.id));
           setLoading(false);
         },
         onError: (error) => {
@@ -213,6 +216,7 @@ const CourseComponent: React.FC = () => {
             courses.map((course, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <CourseCard
+                  idForLessons={idForLessons[index]}
                   course={course}
                   onEdit={handleEditCourse}
                   onDelete={handleDeleteCourse}

@@ -4,12 +4,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
-import { ILectionForm } from "../ILectionForm";
+import { ILessonForm } from "../ILessonForm";
+import { useDeleteLesson } from "../../../../domain/lesson/services/lesson-service";
 
 interface StudentCardProps {
-  lection: ILectionForm;
-  onEdit: (lection: ILectionForm) => void;
-  onDelete: (lection: ILectionForm) => void;
+  lection: ILessonForm;
+  onEdit: (lection: ILessonForm) => void;
+  onDelete: (lection: ILessonForm) => void;
 }
 
 const LectionCard: React.FC<StudentCardProps> = ({
@@ -18,6 +19,12 @@ const LectionCard: React.FC<StudentCardProps> = ({
   onDelete,
 }) => {
   const [showActions, setShowActions] = React.useState(false);
+  const deleteLesson = useDeleteLesson();
+
+  const handleDeleteClick = () => {
+    deleteLesson.mutate(Number(lection.courseSectionId));
+    onDelete(lection);
+  };
 
   return (
     <Card
@@ -43,9 +50,9 @@ const LectionCard: React.FC<StudentCardProps> = ({
             direction="column"
             justifyContent="center"
           >
-            <Box textAlign="center">ID: {lection.id}</Box>
+            <Box textAlign="center">ID: {lection.courseSectionId}</Box>
             <Box textAlign="center">
-              {lection.nombre} {lection.apellido}{" "}
+              {lection.name} 
             </Box>
           </Grid>
           <Grid
@@ -60,7 +67,7 @@ const LectionCard: React.FC<StudentCardProps> = ({
                 <IconButton color="primary" onClick={() => onEdit(lection)}>
                   <EditIcon sx={{ fontSize: 22 }} />
                 </IconButton>
-                <IconButton color="error" onClick={() => onDelete(lection)}>
+                <IconButton color="error" onClick={handleDeleteClick}>
                   <DeleteIcon sx={{ fontSize: 22 }} />
                 </IconButton>
               </>

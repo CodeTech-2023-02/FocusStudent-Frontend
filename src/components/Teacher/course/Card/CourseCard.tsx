@@ -12,13 +12,15 @@ interface CourseCardProps {
   onEdit: (course: ICourseForm) => void;
   onDelete: (course: ICourseForm) => void;
   role: string;
+  idForLessons: number;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
   course,
   onEdit,
   onDelete,
-  role
+  role,
+  idForLessons
 }) => {
   const [showActions, setShowActions] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -85,7 +87,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </Grid>
       </CardContent>
       {role === 'TEACHER' && (
-        <CourseDrawer isOpen={drawerOpen} selectedCourse={course} onClose={() => setDrawerOpen(false)} />
+        <CourseDrawer isOpen={drawerOpen} idForLessons={idForLessons} selectedCourse={course} onClose={() => setDrawerOpen(false)} />
       )}
     </Card>
   );

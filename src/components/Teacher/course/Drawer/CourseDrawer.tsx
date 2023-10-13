@@ -7,6 +7,7 @@ interface CourseDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   selectedCourse: ICourseForm;
+  idForLessons: number;
 }
 
 const StyledImage = styled(
@@ -19,7 +20,7 @@ const StyledImage = styled(
 });
 
 
-const CourseDrawer: React.FC<CourseDrawerProps> = ({ isOpen, onClose, selectedCourse }) => {
+const CourseDrawer: React.FC<CourseDrawerProps> = ({ isOpen, onClose, selectedCourse , idForLessons}) => {
   const navigate = useNavigate();
 
   return (
@@ -36,7 +37,7 @@ const CourseDrawer: React.FC<CourseDrawerProps> = ({ isOpen, onClose, selectedCo
         <hr />
       </Box>
       <Box sx={{ width: 400 }} textAlign="center" >
-        <Button onClick={() => navigate(`/lection/${selectedCourse.id}`)}>
+        <Button onClick={() => navigate(`/lection/${idForLessons}`)}>
           Lecciones
         </Button>
 
