@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Roles } from "../../constants/roles";
-import {  DASHBOARD } from "../../constants/routes";
+import { DASHBOARD } from "../../constants/routes";
 import { useLogin } from "../../domain/auth/services/auth-service";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -169,7 +169,10 @@ const Login = () => {
             <Grid item mt={4}>
               <Typography variant="body2">
                 ¿Problemas con tu cuenta?
-                <Link onClick={() => navigate("/support")}> Contacta a soporte</Link>
+                <Link onClick={() => navigate("/support")}>
+                  {" "}
+                  Contacta a soporte
+                </Link>
               </Typography>
             </Grid>
 

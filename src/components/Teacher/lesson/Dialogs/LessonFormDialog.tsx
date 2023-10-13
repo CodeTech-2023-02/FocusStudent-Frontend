@@ -3,13 +3,16 @@ import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { SimpleDialog } from "../../../../abstracts/Modals/SimpleDialog";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
 import { ILessonForm } from "../ILessonForm";
-import { useCreateLesson, useEditLesson } from "../../../../domain/lesson/services/lesson-service";
+import {
+  useCreateLesson,
+  useEditLesson,
+} from "../../../../domain/lesson/services/lesson-service";
 import { useParams } from "react-router-dom";
 import useModal from "../../../../hooks/useModal";
 import { OkModal } from "../../../../abstracts/Modals/Modals";
@@ -36,7 +39,7 @@ export const LectionFormDialog: React.FC<LectionFormDialogProps> = ({
   defaultValues,
   onSubmit,
   mode,
-  fetchLessons
+  fetchLessons,
 }) => {
   const initialValues = defaultValues || {
     courseSectionId: 0,
@@ -63,7 +66,6 @@ export const LectionFormDialog: React.FC<LectionFormDialogProps> = ({
   const editLesson = useEditLesson();
 
   const handleFormSubmit = (data: ILessonForm) => {
-
     if (mode === "create") {
       data.courseSectionId = Number(id);
       createLesson.mutate(data, {
@@ -83,40 +85,42 @@ export const LectionFormDialog: React.FC<LectionFormDialogProps> = ({
         },
         onError: (error) => {
           console.error("Error al crear la lección:", error);
-        }
-      });
-
-    } else if (mode === "edit" && defaultValues) {
-      editLesson.mutate({
-        lessonId: Number(defaultValues.id),
-        data: data,
-      },{
-        onSuccess: () => {
-          successModal.openModal(
-            () => {
-              successModal.closeModal();
-            },
-            () => {
-              fetchLessons && fetchLessons();
-            },
-            "Operación exitosa",
-            "Lección editada correctamente"
-          );
         },
-        onError: (error) => {
-          console.error("Error al crear la lección:", error);
-          successModal.openModal(
-            () => {
-              successModal.closeModal();
-            },
-            () => {
-              fetchLessons && fetchLessons();
-            },
-            "Ocurrío un error",
-            "Ocurrío un error al editar la lección"
-          );
-        }
       });
+    } else if (mode === "edit" && defaultValues) {
+      editLesson.mutate(
+        {
+          lessonId: Number(defaultValues.id),
+          data: data,
+        },
+        {
+          onSuccess: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => {
+                fetchLessons && fetchLessons();
+              },
+              "Operación exitosa",
+              "Lección editada correctamente"
+            );
+          },
+          onError: (error) => {
+            console.error("Error al crear la lección:", error);
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => {
+                fetchLessons && fetchLessons();
+              },
+              "Ocurrío un error",
+              "Ocurrío un error al editar la lección"
+            );
+          },
+        }
+      );
     }
     //handleCloseDialog();
   };
@@ -174,14 +178,14 @@ export const LectionFormDialog: React.FC<LectionFormDialogProps> = ({
                 render={({ field }) => (
                   <DatePicker
                     label="Fecha de inicio (dd/MM/yyyy)"
-                    renderInput={(params) =>
+                    renderInput={(params) => (
                       <TextField
                         {...params}
                         fullWidth
                         helperText={errors.initialTime?.message}
                         error={!!errors.initialTime}
                       />
-                    }
+                    )}
                     {...field}
                   />
                 )}
@@ -194,14 +198,14 @@ export const LectionFormDialog: React.FC<LectionFormDialogProps> = ({
                 render={({ field }) => (
                   <DatePicker
                     label="Fecha de fin (dd/MM/yyyy)"
-                    renderInput={(params) =>
+                    renderInput={(params) => (
                       <TextField
                         {...params}
                         fullWidth
                         helperText={errors.finalTime?.message}
                         error={!!errors.finalTime}
                       />
-                    }
+                    )}
                     {...field}
                   />
                 )}

@@ -62,9 +62,12 @@ function HeaderUserbox() {
   const user = {
     name: storedUser.name || "Usuario",
     avatar: "images/gaa.png",
-    jobtitle: (storedUser.role === "TEACHER" || storedUser.role === "STUDENT")
-    ? (storedUser.role === "TEACHER" ? "Profesor" : "Estudiante")
-    : "Administrador",
+    jobtitle:
+      storedUser.role === "TEACHER" || storedUser.role === "STUDENT"
+        ? storedUser.role === "TEACHER"
+          ? "Profesor"
+          : "Estudiante"
+        : "Administrador",
   };
 
   const auth = useAuth();

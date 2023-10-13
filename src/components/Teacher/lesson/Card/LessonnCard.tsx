@@ -51,9 +51,7 @@ const LectionCard: React.FC<StudentCardProps> = ({
             justifyContent="center"
           >
             <Box textAlign="center">ID: {lection.courseSectionId}</Box>
-            <Box textAlign="center">
-              {lection.name} 
-            </Box>
+            <Box textAlign="center">{lection.name}</Box>
           </Grid>
           <Grid
             item

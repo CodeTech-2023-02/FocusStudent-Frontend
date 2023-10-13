@@ -6,7 +6,11 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { CourseSectionEndpoints } from "../constants/endpoint";
-import { ICourseSection, ICourseSectionTeacher, IResponseCourseSection } from "../constants/interfaces";
+import {
+  ICourseSection,
+  ICourseSectionTeacher,
+  IResponseCourseSection,
+} from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 
@@ -33,7 +37,7 @@ class CourseSectionRepository {
   editCourseSection = (
     data: ICourseSection[]
   ): Promise<HttpResponse<IResponseCourseSection>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section,);
+    const url = buildUrl(CourseSectionEndpoints.course_section);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.PUT,
@@ -43,8 +47,13 @@ class CourseSectionRepository {
     });
   };
 
-  deleteCourseSection = (courseSectionId: number[]): Promise<HttpResponse<IResponseCourseSection>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section, CourseSectionEndpoints.courseSectionId);
+  deleteCourseSection = (
+    courseSectionId: number[]
+  ): Promise<HttpResponse<IResponseCourseSection>> => {
+    const url = buildUrl(
+      CourseSectionEndpoints.course_section,
+      CourseSectionEndpoints.courseSectionId
+    );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.DELETE,
@@ -62,28 +71,39 @@ class CourseSectionRepository {
       url,
       headers,
     });
-  }
+  };
 
-  getAllCourseSectionByTeacher = (teacherId: number): Promise<HttpResponse<ICourseSectionTeacher[]>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section, CourseSectionEndpoints.teacher, teacherId.toString());
+  getAllCourseSectionByTeacher = (
+    teacherId: number
+  ): Promise<HttpResponse<ICourseSectionTeacher[]>> => {
+    const url = buildUrl(
+      CourseSectionEndpoints.course_section,
+      CourseSectionEndpoints.teacher,
+      teacherId.toString()
+    );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.GET,
       url,
       headers,
     });
-  }
+  };
 
-  getAllCourseSectionBySection = (sectionId: number): Promise<HttpResponse<ICourseSectionTeacher[]>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section, CourseSectionEndpoints.section, sectionId.toString());
+  getAllCourseSectionBySection = (
+    sectionId: number
+  ): Promise<HttpResponse<ICourseSectionTeacher[]>> => {
+    const url = buildUrl(
+      CourseSectionEndpoints.course_section,
+      CourseSectionEndpoints.section,
+      sectionId.toString()
+    );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.GET,
       url,
       headers,
     });
-  }
-
+  };
 }
 
 const courseSectionRepository = new CourseSectionRepository(axiosHttpClient);

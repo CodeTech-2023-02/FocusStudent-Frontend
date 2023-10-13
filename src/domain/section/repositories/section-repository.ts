@@ -6,7 +6,11 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { SectionEndpoints } from "../constants/endpoint";
-import { ISection, ISectionGet, ISectionResponse } from "../constants/interfaces";
+import {
+  ISection,
+  ISectionGet,
+  ISectionResponse,
+} from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 
@@ -17,9 +21,7 @@ function buildUrl(...args: string[]): string {
 class SectionRepository {
   constructor(private httpClient: HttpClient) {}
 
-  create = (
-    data: ISection
-  ): Promise<HttpResponse<ISectionResponse>> => {
+  create = (data: ISection): Promise<HttpResponse<ISectionResponse>> => {
     const url = buildUrl(SectionEndpoints.section);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -62,7 +64,7 @@ class SectionRepository {
       url,
       headers,
     });
-  }
+  };
 }
 
 const sectionRepository = new SectionRepository(axiosHttpClient);

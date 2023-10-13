@@ -1,7 +1,10 @@
 import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import React from "react";
 import { ConfirmationModal, OkModal } from "../../../abstracts/Modals/Modals";
-import { useDeleteSection, useGetAllSections } from "../../../domain/section/services/section-services";
+import {
+  useDeleteSection,
+  useGetAllSections,
+} from "../../../domain/section/services/section-services";
 import useModal from "../../../hooks/useModal";
 import SectionCard from "./Card/SectionCard";
 import { SectionFormDialog } from "./Dialogs/SectionFormDialog";
@@ -13,8 +16,6 @@ const SectionComponent: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [courses, setCourses] = React.useState<ISectionForm[]>([]);
 
-
-
   const getSectionMutation = useGetAllSections();
   const deleteSectionMutation = useDeleteSection();
 
@@ -23,9 +24,9 @@ const SectionComponent: React.FC = () => {
     ISectionForm | undefined
   >();
 
-  const [dialogMode, setDialogMode] = React.useState<"create" | "edit" | "config">(
-    "create"
-  );
+  const [dialogMode, setDialogMode] = React.useState<
+    "create" | "edit" | "config"
+  >("create");
 
   const fetchCourses = () => {
     setLoading(true);
@@ -44,7 +45,6 @@ const SectionComponent: React.FC = () => {
   React.useEffect(() => {
     fetchCourses();
   }, []);
-
 
   const handleCreateCourse = () => {
     setDialogMode("create");
@@ -84,7 +84,7 @@ const SectionComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Operación exitosa",
               "Sección eliminada con éxito"
             );
@@ -97,7 +97,7 @@ const SectionComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Ocurrió un error",
               "No se pudo eliminar la sección"
             );
@@ -112,10 +112,6 @@ const SectionComponent: React.FC = () => {
       "Eliminar la sección",
       "¿Estás seguro de que deseas eliminar la sección?"
     );
-  }
-
-  const handleSubmitCourse = (data: ISectionForm) => {
-
   };
 
   return (
@@ -145,7 +141,6 @@ const SectionComponent: React.FC = () => {
           key={selectedSection ? selectedSection.name : "new-course"}
           open={openDialog}
           onClose={handleCloseDialog}
-          onSubmit={handleSubmitCourse}
           mode={dialogMode}
           refetch={fetchCourses}
           selectedSection={selectedSection}

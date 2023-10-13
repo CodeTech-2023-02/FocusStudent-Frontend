@@ -1,6 +1,6 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PeopleIcon from "@mui/icons-material/People";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
 import { ISectionForm } from "../ISectionForm";
@@ -20,7 +20,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   onDelete,
 }) => {
   const [showActions, setShowActions] = React.useState(false);
-  
+
   return (
     <Card
       onMouseLeave={() => setShowActions(false)}
@@ -53,27 +53,24 @@ const SectionCard: React.FC<SectionCardProps> = ({
             justifyContent="flex-end"
             alignItems="center"
           >
-            {(
-              showActions ? (
-                <>
+            {showActions ? (
+              <>
                 <IconButton color="primary" onClick={() => onEdit(course)}>
-                    <EditIcon sx={{ fontSize: 22 }} />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => onDelete(course)}>
-                    <DeleteIcon sx={{ fontSize: 22 }} />
-                  </IconButton>
-                  <IconButton color="primary" onClick={() => config(course)}>
-                    <SettingsIcon sx={{ fontSize: 22 }} />
-                  </IconButton>
-                </>
-              ) : (
-                <ArrowForwardIosIcon
-                  fontSize="large"
-                  onMouseEnter={() => setShowActions(true)}
-
-                  style={{ cursor: 'pointer' }}
-                />
-              )
+                  <EditIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+                <IconButton color="error" onClick={() => onDelete(course)}>
+                  <DeleteIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+                <IconButton color="primary" onClick={() => config(course)}>
+                  <SettingsIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+              </>
+            ) : (
+              <ArrowForwardIosIcon
+                fontSize="large"
+                onMouseEnter={() => setShowActions(true)}
+                style={{ cursor: "pointer" }}
+              />
             )}
           </Grid>
         </Grid>

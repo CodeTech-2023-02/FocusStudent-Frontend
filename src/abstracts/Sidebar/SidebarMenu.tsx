@@ -12,7 +12,7 @@ import {
   SECTION,
   STUDENTS,
   STUDENT_REPORTS,
-  STUDENT_TRACKING
+  STUDENT_TRACKING,
 } from "../../constants/routes";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { useAuth } from "../../state/AuthContext";
@@ -174,11 +174,8 @@ function SidebarMenu() {
     { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },
   ];
-  
-  const adminRoutes = [
-    { path: SECTION, label: "Secciones" },
-  ];
-  
+
+  const adminRoutes = [{ path: SECTION, label: "Secciones" }];
 
   const studentRoutes = [
     { path: DASHBOARD, label: "Dashboard" },
@@ -188,24 +185,18 @@ function SidebarMenu() {
     { path: POLICY, label: "Políticas" },
   ];
 
-
-
   let routes: any[] = [];
-  if (
-    currentUserRole.toUpperCase() === Roles.STUDENT
-  ) {
+  if (currentUserRole.toUpperCase() === Roles.STUDENT) {
     routes = studentRoutes;
-  } else if (
-    currentUserRole.toUpperCase() === Roles.TEACHER
-  ) {
+  } else if (currentUserRole.toUpperCase() === Roles.TEACHER) {
     routes = teacherAdminRoutes;
+  } else if (currentUserRole.toUpperCase() === Roles.ADMIN) {
+    routes = [
+      teacherAdminRoutes[0],
+      adminRoutes[0],
+      ...teacherAdminRoutes.slice(1),
+    ];
   }
-  else if (currentUserRole.toUpperCase() === Roles.ADMIN) {
-    routes = [teacherAdminRoutes[0], adminRoutes[0], ...teacherAdminRoutes.slice(1)];
-  }
-  
-  
-
 
   return (
     <MenuWrapper>

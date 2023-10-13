@@ -15,17 +15,16 @@ import { useAuth } from "../../../state/AuthContext";
 import { useGetAllCoursesSectionByTeacher } from "../../../domain/course_section/services/course_section-service";
 
 const CourseComponent: React.FC = () => {
-  
   const [loading, setLoading] = React.useState(true);
   const [courses, setCourses] = React.useState<ICourseForm[]>([]);
   const [idForLessons, setIdForLessons] = React.useState<number[]>([]);
-
 
   const createCourseMutation = useCreateCourse();
   const editCourseMutation = useEditCourse();
   const deleteCourseMutation = useDeleteCourse();
   const getCourseMutation = useGetAllCourses();
-  const getAllCoursesSectionByTeacherMutation = useGetAllCoursesSectionByTeacher();
+  const getAllCoursesSectionByTeacherMutation =
+    useGetAllCoursesSectionByTeacher();
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
@@ -35,7 +34,7 @@ const CourseComponent: React.FC = () => {
   >();
 
   const { currentUser } = useAuth();
-  const role = currentUser?.role || '';
+  const role = currentUser?.role || "";
 
   const [dialogMode, setDialogMode] = React.useState<"create" | "edit">(
     "create"
@@ -46,8 +45,8 @@ const CourseComponent: React.FC = () => {
     if (role === "TEACHER" && currentUser) {
       getAllCoursesSectionByTeacherMutation.mutate(currentUser.id, {
         onSuccess: (response) => {
-          setCourses(response.map(item => item.course));
-          setIdForLessons(response.map(item => item.id));
+          setCourses(response.map((item) => item.course));
+          setIdForLessons(response.map((item) => item.id));
           setLoading(false);
         },
         onError: (error) => {
@@ -68,12 +67,10 @@ const CourseComponent: React.FC = () => {
       });
     }
   };
-  
-  
+
   React.useEffect(() => {
     fetchCourses();
   }, []);
-  
 
   const handleCreateCourse = () => {
     setDialogMode("create");
@@ -110,7 +107,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Operación exitosa",
               "Curso eliminado con éxito"
             );
@@ -123,7 +120,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Ocurrió un error",
               "No se pudo eliminar el curso"
             );
@@ -148,7 +145,7 @@ const CourseComponent: React.FC = () => {
             () => {
               successModal.closeModal();
             },
-            () => { },
+            () => {},
             "Operación exitosa",
             response.message
           );
@@ -161,7 +158,7 @@ const CourseComponent: React.FC = () => {
             () => {
               successModal.closeModal();
             },
-            () => { },
+            () => {},
             "Ocurrió un error",
             error.response.data.message
           );
@@ -180,7 +177,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Operación exitosa",
               "Curso editado con éxito"
             );
@@ -192,7 +189,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Ocurrió un error",
               error.response.data.message
             );

@@ -6,7 +6,11 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { CourseEndpoints } from "../constants/endpoint";
-import { ICreateEditCourse, IGetAllResponse, IRegisterResponse } from "../constants/interfaces";
+import {
+  ICreateEditCourse,
+  IGetAllResponse,
+  IRegisterResponse,
+} from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 
@@ -62,7 +66,7 @@ class CourseRepository {
       url,
       headers,
     });
-  }
+  };
 }
 
 const courseRepository = new CourseRepository(axiosHttpClient);

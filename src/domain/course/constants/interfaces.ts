@@ -9,8 +9,8 @@ export interface IRegisterResponse {
 }
 
 export interface IGetAllResponse {
-    id:          number;
-    name:        string;
-    year:        number;
-    description: string;
+  id: number;
+  name: string;
+  year: number;
+  description: string;
 }

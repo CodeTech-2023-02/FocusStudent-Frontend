@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { DASHBOARD } from "../../constants/routes";
@@ -23,6 +22,6 @@ const NotFound: React.FC<NotFoundProps> = ({ role }) => {
       </Box>
     </Container>
   );
-}
+};
 
 export default NotFound;

@@ -17,9 +17,7 @@ function buildUrl(...args: string[]): string {
 class LessonRepository {
   constructor(private httpClient: HttpClient) {}
 
-  create = (
-    data: ILesson
-  ): Promise<HttpResponse<ILessonResponse>> => {
+  create = (data: ILesson): Promise<HttpResponse<ILessonResponse>> => {
     const url = buildUrl(LessonEndpoints.lesson);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -62,17 +60,23 @@ class LessonRepository {
       url,
       headers,
     });
-  }
+  };
 
-  getLessonsByCourseSection = (courseSectionId: number): Promise<HttpResponse<GetLessons[]>> => {
-    const url = buildUrl(LessonEndpoints.lesson, LessonEndpoints.courseSection, courseSectionId.toString());
+  getLessonsByCourseSection = (
+    courseSectionId: number
+  ): Promise<HttpResponse<GetLessons[]>> => {
+    const url = buildUrl(
+      LessonEndpoints.lesson,
+      LessonEndpoints.courseSection,
+      courseSectionId.toString()
+    );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.GET,
       url,
       headers,
     });
-  }
+  };
 }
 
 const lessonRepository = new LessonRepository(axiosHttpClient);

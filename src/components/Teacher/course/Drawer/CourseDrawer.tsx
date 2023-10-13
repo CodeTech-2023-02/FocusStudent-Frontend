@@ -19,33 +19,41 @@ const StyledImage = styled(
   margin: "auto",
 });
 
-
-const CourseDrawer: React.FC<CourseDrawerProps> = ({ isOpen, onClose, selectedCourse , idForLessons}) => {
+const CourseDrawer: React.FC<CourseDrawerProps> = ({
+  isOpen,
+  onClose,
+  selectedCourse,
+  idForLessons,
+}) => {
   const navigate = useNavigate();
 
   return (
-    <Drawer anchor="right" open={isOpen} onClose={onClose} >
+    <Drawer anchor="right" open={isOpen} onClose={onClose}>
       <Box sx={{ width: 400 }} p={4}>
         <Typography variant="h3" sx={{ textAlign: "center" }}>
           Detalle del curso
         </Typography>
         <Box textAlign="center" pt={3}>
-          <Typography variant="h5" fontWeight={2} pb={1}>Año: {selectedCourse.year}</Typography>
-          <Typography variant="h5" fontWeight={2} pb={1}>Nombre: {selectedCourse.name}</Typography>
-          <Typography variant="h5" fontWeight={2} pb={1}>Descripción: {selectedCourse.description}</Typography>
+          <Typography variant="h5" fontWeight={2} pb={1}>
+            Año: {selectedCourse.year}
+          </Typography>
+          <Typography variant="h5" fontWeight={2} pb={1}>
+            Nombre: {selectedCourse.name}
+          </Typography>
+          <Typography variant="h5" fontWeight={2} pb={1}>
+            Descripción: {selectedCourse.description}
+          </Typography>
         </Box>
         <hr />
       </Box>
-      <Box sx={{ width: 400 }} textAlign="center" >
+      <Box sx={{ width: 400 }} textAlign="center">
         <Button onClick={() => navigate(`/lection/${idForLessons}`)}>
           Lecciones
         </Button>
-
       </Box>
-      <Box sx={{ width: 400 }} textAlign="center" pt={20} >
+      <Box sx={{ width: 400 }} textAlign="center" pt={20}>
         <StyledImage src="assets/leccion.svg" alt="Login illustration" />
       </Box>
-
     </Drawer>
   );
 };

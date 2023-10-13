@@ -11,32 +11,34 @@ export function useCreateLesson() {
 
 export function useEditLesson() {
   return useMutation<
-  ILessonResponse,
+    ILessonResponse,
     Error,
     { lessonId: number; data: ILesson }
   >({
     mutationFn: ({ lessonId, data }) =>
-    lessonRepository.edit(lessonId, data).then((response) => response.body),
+      lessonRepository.edit(lessonId, data).then((response) => response.body),
   });
 }
 
 export function useDeleteLesson() {
   return useMutation<ILessonResponse, Error, number>({
     mutationFn: (lessonId: number) =>
-    lessonRepository.delete(lessonId).then((response) => response.body),
+      lessonRepository.delete(lessonId).then((response) => response.body),
   });
 }
 
 export function useGetAllLessons() {
   return useMutation<GetLessons[], Error, void>({
     mutationFn: () =>
-    lessonRepository.getLessons().then((response) => response.body),
+      lessonRepository.getLessons().then((response) => response.body),
   });
 }
 
 export function useGetLessonsByCourseSection() {
   return useMutation<GetLessons[], Error, number>({
     mutationFn: (courseSectionId: number) =>
-    lessonRepository.getLessonsByCourseSection(courseSectionId).then((response) => response.body),
+      lessonRepository
+        .getLessonsByCourseSection(courseSectionId)
+        .then((response) => response.body),
   });
 }

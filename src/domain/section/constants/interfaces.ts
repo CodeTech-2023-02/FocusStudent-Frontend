@@ -1,12 +1,12 @@
 export interface ISection {
-    name: string;
+  name: string;
 }
 
 export interface ISectionGet {
-    id:   number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface ISectionResponse {
-    message: string;
+  message: string;
 }

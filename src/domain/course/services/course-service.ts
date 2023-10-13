@@ -1,6 +1,10 @@
 import { useMutation } from "react-query";
 import { courseRepository } from "../repositories/course-repository";
-import { ICreateEditCourse, IGetAllResponse, IRegisterResponse } from "../constants/interfaces";
+import {
+  ICreateEditCourse,
+  IGetAllResponse,
+  IRegisterResponse,
+} from "../constants/interfaces";
 
 export function useCreateCourse() {
   return useMutation<IRegisterResponse, Error, ICreateEditCourse>({

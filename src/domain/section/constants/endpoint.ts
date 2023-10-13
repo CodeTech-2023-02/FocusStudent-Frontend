@@ -1,4 +1,3 @@
 export enum SectionEndpoints {
-    section = "/section",
-  }
-  
+  section = "/section",
+}

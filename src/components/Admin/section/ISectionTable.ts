@@ -1,6 +1,5 @@
 interface ISectionTable {
-    courseId: number;
-    sectionId: number;
-    teacherId: number;
-  }
-  
+  courseId: number;
+  sectionId: number;
+  teacherId: number;
+}

@@ -20,7 +20,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onEdit,
   onDelete,
   role,
-  idForLessons
+  idForLessons,
 }) => {
   const [showActions, setShowActions] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -58,36 +58,38 @@ const CourseCard: React.FC<CourseCardProps> = ({
             justifyContent="flex-end"
             alignItems="center"
           >
-            {role === 'TEACHER' ? (
+            {role === "TEACHER" ? (
               <ArrowForwardIosIcon
                 fontSize="large"
                 onClick={() => setDrawerOpen(true)}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
               />
+            ) : showActions ? (
+              <>
+                <IconButton color="primary" onClick={() => onEdit(course)}>
+                  <EditIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+                <IconButton color="error" onClick={() => onDelete(course)}>
+                  <DeleteIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+              </>
             ) : (
-              showActions ? (
-                <>
-                  <IconButton color="primary" onClick={() => onEdit(course)}>
-                    <EditIcon sx={{ fontSize: 22 }} />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => onDelete(course)}>
-                    <DeleteIcon sx={{ fontSize: 22 }} />
-                  </IconButton>
-                </>
-              ) : (
-                <ArrowForwardIosIcon
-                  fontSize="large"
-                  onMouseEnter={() => setShowActions(true)}
-
-                  style={{ cursor: 'pointer' }}
-                />
-              )
+              <ArrowForwardIosIcon
+                fontSize="large"
+                onMouseEnter={() => setShowActions(true)}
+                style={{ cursor: "pointer" }}
+              />
             )}
           </Grid>
         </Grid>
       </CardContent>
-      {role === 'TEACHER' && (
-        <CourseDrawer isOpen={drawerOpen} idForLessons={idForLessons} selectedCourse={course} onClose={() => setDrawerOpen(false)} />
+      {role === "TEACHER" && (
+        <CourseDrawer
+          isOpen={drawerOpen}
+          idForLessons={idForLessons}
+          selectedCourse={course}
+          onClose={() => setDrawerOpen(false)}
+        />
       )}
     </Card>
   );

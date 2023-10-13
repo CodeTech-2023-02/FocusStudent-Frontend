@@ -8,8 +8,6 @@ import {
 import { TeacherEndpoints } from "../constants/endpoint";
 import { ITeacher } from "../constants/interfaces";
 
-
-
 const HOST_API = import.meta.env.VITE_APP_API;
 
 function buildUrl(...args: string[]): string {
@@ -19,7 +17,6 @@ function buildUrl(...args: string[]): string {
 class TeacherRepository {
   constructor(private httpClient: HttpClient) {}
 
-
   getAll = (): Promise<HttpResponse<ITeacher[]>> => {
     const url = buildUrl(TeacherEndpoints.teacher);
     const headers = UtilsHttp.BaseHeaders();
@@ -28,7 +25,7 @@ class TeacherRepository {
       url,
       headers,
     });
-  }
+  };
 }
 
 const teacherRepository = new TeacherRepository(axiosHttpClient);

@@ -1,5 +1,4 @@
 export enum LessonEndpoints {
-    lesson = "/lesson",
-    courseSection= "course-section"
-  }
-  
+  lesson = "/lesson",
+  courseSection = "course-section",
+}

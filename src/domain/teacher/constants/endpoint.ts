@@ -1,4 +1,3 @@
 export enum TeacherEndpoints {
-    teacher = "/teacher",
-  }
-  
+  teacher = "/teacher",
+}

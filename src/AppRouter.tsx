@@ -48,7 +48,7 @@ const AppRouter: React.FC = () => {
                 <Navigate
                   to={
                     isLoggedIn.role === Roles.TEACHER ||
-                      isLoggedIn.role === Roles.ADMIN
+                    isLoggedIn.role === Roles.ADMIN
                       ? DASHBOARD
                       : DASHBOARD
                   }

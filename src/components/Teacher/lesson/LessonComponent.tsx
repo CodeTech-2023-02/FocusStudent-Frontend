@@ -6,14 +6,17 @@ import useModal from "../../../hooks/useModal";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useParams } from "react-router-dom";
-import { useDeleteLesson, useGetLessonsByCourseSection } from "../../../domain/lesson/services/lesson-service";
+import {
+  useDeleteLesson,
+  useGetLessonsByCourseSection,
+} from "../../../domain/lesson/services/lesson-service";
 import LectionCard from "./Card/LessonnCard";
 import { LectionFormDialog } from "./Dialogs/LessonFormDialog";
 import { ILessonForm } from "./ILessonForm";
 
 const LectionComponent: React.FC = () => {
   const confirmationDeleteModal = useModal();
-  const getLessons =  useGetLessonsByCourseSection();
+  const getLessons = useGetLessonsByCourseSection();
   const [lessons, setLessosn] = React.useState<ILessonForm[]>([]);
 
   const { id } = useParams();
@@ -25,14 +28,14 @@ const LectionComponent: React.FC = () => {
   const fetchLessons = () => {
     getLessons.mutate(Number(id), {
       onSuccess: (response) => {
-        const transformedData = response.map(item => ({
+        const transformedData = response.map((item) => ({
           id: item.id,
           courseSectionId: item.courseSection.id,
           name: item.name,
           initialTime: item.initialTime,
-          finalTime: item.finalTime
+          finalTime: item.finalTime,
         }));
-        
+
         setLessosn(transformedData);
       },
       onError: (error) => {
@@ -40,11 +43,10 @@ const LectionComponent: React.FC = () => {
       },
     });
   };
-  
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [selectedLection, setSelectedLection] = React.useState<
-  ILessonForm | undefined
+    ILessonForm | undefined
   >();
 
   const [dialogMode, setDialogMode] = React.useState<"create" | "edit">(
@@ -62,7 +64,6 @@ const LectionComponent: React.FC = () => {
   const handleEditLection = (lection: ILessonForm) => {
     setDialogMode("edit");
     handleOpenDialog(lection);
-    
   };
 
   const handleOpenDialog = (lection?: ILessonForm) => {
@@ -89,7 +90,7 @@ const LectionComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Operación exitosa",
               "Lección eliminada con éxito"
             );
@@ -102,7 +103,7 @@ const LectionComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Ocurrió un error",
               "No se pudo eliminar la lección"
             );
@@ -117,7 +118,7 @@ const LectionComponent: React.FC = () => {
       "Eliminar la sección",
       "¿Estás seguro de que deseas eliminar la sección?"
     );
-  }
+  };
 
   const handleSubmitLection = (data: ILessonForm) => {
     console.log(data);
@@ -159,7 +160,6 @@ const LectionComponent: React.FC = () => {
           defaultValues={selectedLection}
           onSubmit={handleSubmitLection}
           fetchLessons={fetchLessons}
-          
         />
         <ConfirmationModal
           height={230}

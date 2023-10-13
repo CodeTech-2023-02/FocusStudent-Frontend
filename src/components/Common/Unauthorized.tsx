@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import { Container, Typography, Box } from "@mui/material";
 
 const Unauthorized: React.FC = () => {
@@ -15,6 +14,6 @@ const Unauthorized: React.FC = () => {
       </Box>
     </Container>
   );
-}
+};
 
 export default Unauthorized;
