@@ -13,10 +13,17 @@ import { IGetAllResponse } from '../../../../domain/course/constants/interfaces'
 import { useGetAllCourses } from '../../../../domain/course/services/course-service';
 import { ITeacher } from '../../../../domain/teacher/constants/interfaces';
 import { useGetAllTeachers } from '../../../../domain/teacher/services/teacher-service';
+import { useCreateCourseSection, useDeleteCourseSection, useEditCourseSection, useGetAllCoursesSectionBySection } from "../../../../domain/course_section/services/course_section-service";
+import { ISectionForm } from "../ISectionForm";
+import { from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { ConfirmationModal, OkModal } from "../../../../abstracts/Modals/Modals";
+import useModal from "../../../../hooks/useModal";
 
 interface Entry {
     courseId: number;
     teacherId: number;
+    id?: number;
 }
 
 const schema = yup.object().shape({
@@ -24,26 +31,46 @@ const schema = yup.object().shape({
     teacherId: yup.number().min(1).required(),
 });
 
-export const SectionsTable: React.FC = () => {
+export const SectionsTable: React.FC<{ selectedSection?: ISectionForm }> = ({ selectedSection }) => {
+
     const [data, setData] = useState<Entry[]>([]);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const { control, getValues, reset, formState: { } } = useForm<Entry>({
+    const { control, getValues, reset, setValue, formState: { } } = useForm<Entry>({
         resolver: yupResolver(schema),
     });
+
     const [teachers, setTeachers] = useState<ITeacher[]>([]);
     const [courses, setCourses] = useState<IGetAllResponse[]>([]);
+    const [refKey, setRefKey] = useState<number>(0);
+    const confirmationDeleteModal = useModal();
+    const successModal = useModal();
+
 
     const getAllTeachers = useGetAllTeachers();
     const getAllCourses = useGetAllCourses();
+    const createCourseSection = useCreateCourseSection();
+    const editCourseSection = useEditCourseSection();
+    const deleteCourseSection = useDeleteCourseSection();
+    const getAllCoursesSectionBySection = useGetAllCoursesSectionBySection();
 
-    const handleAdd = () => {
-        const values = getValues();
-
-        if (values.courseId && values.teacherId) {
-            setData(prevData => [...prevData, values]);
-            reset();
+    React.useEffect(() => {
+        if (selectedSection?.id) {
+            getAllCoursesSectionBySection.mutate(selectedSection.id, {
+                onSuccess: (fetchedData) => {
+                    const transformedData = fetchedData.map(item => ({
+                        courseId: item.course.id,
+                        teacherId: item.teacher.id,
+                        id: item.id
+                    }));
+                    setData(transformedData);
+                },
+                onError: (error) => {
+                    console.error("Error al cargar datos iniciales:", error);
+                }
+            });
         }
-    };
+    }, [selectedSection]);
+
 
     React.useEffect(() => {
         getAllTeachers.mutate();
@@ -59,14 +86,141 @@ export const SectionsTable: React.FC = () => {
         }
     }, [getAllTeachers.data, getAllCourses.data]);
 
+    const deleteEntry = (index: number) => {
+        if (data[index].id !== undefined) {
+            const courseSectionIdToDelete = [data[index].id as number];
+
+            confirmationDeleteModal.openModal(
+                () => {
+                    confirmationDeleteModal.startProcessing();
+                    from(deleteCourseSection.mutateAsync(courseSectionIdToDelete))
+                        .pipe(
+                            switchMap(() => from(getAllCoursesSectionBySection.mutateAsync(selectedSection?.id || 0)))
+                        )
+                        .subscribe(
+                            (fetchedData) => {
+                                const transformedData = fetchedData.map(item => ({
+                                    courseId: item.course.id,
+                                    teacherId: item.teacher.id,
+                                    id: item.id
+                                }));
+                                setData(transformedData);
+                                confirmationDeleteModal.stopProcessing();
+                                confirmationDeleteModal.closeModal();
+                                successModal.openModal(
+                                    undefined,
+                                    undefined,
+                                    "Operación exitosa",
+                                    "Sección de dicho curso eliminada con éxito"
+                                );
+                            },
+                            (error) => {
+                                console.error("Error al eliminar una entrada:", error);
+                                confirmationDeleteModal.stopProcessing();
+                                confirmationDeleteModal.closeModal();
+                                successModal.openModal(
+                                    undefined,
+                                    undefined,
+                                    "Ocurrió un error",
+                                    "No se pudo eliminar la sección de dicho curso"
+                                );
+                            }
+                        );
+                },
+                undefined,
+                "Eliminar ",
+                "¿Estás seguro de que deseas eliminar esta sección de dicho curso?"
+            );
+        } else {
+            console.error("El ID no está definido para el índice:", index);
+        }
+    };
 
     const handleEdit = (index: number) => {
         const values = getValues();
-        const updatedData = [...data];
-        updatedData[index] = values;
-        setData(updatedData);
-        setEditingIndex(null);
+        const courseSectionToUpdate = {
+            courseId: values.courseId,
+            teacherId: values.teacherId,
+            sectionId: selectedSection?.id || 0,
+            courseSectionId: data[index].id
+        };
+
+        from(editCourseSection.mutateAsync({ data: [courseSectionToUpdate] }))
+            .pipe(
+                switchMap(() => from(getAllCoursesSectionBySection.mutateAsync(selectedSection?.id || 0)))
+            )
+            .subscribe(
+                (fetchedData) => {
+                    const transformedData = fetchedData.map(item => ({
+                        courseId: item.course.id,
+                        teacherId: item.teacher.id,
+                        id: item.id
+                    }));
+                    setData(transformedData);
+                    setEditingIndex(null);
+                    successModal.openModal(
+                        undefined,
+                        undefined,
+                        "Operación exitosa",
+                        "Sección de dicho curso editada con éxito"
+                    );
+                },
+                (error) => {
+                    console.error("Error al editar una entrada:", error);
+                    successModal.openModal(
+                        undefined,
+                        undefined,
+                        "Ocurrió un error",
+                        "No se pudo editar la sección de dicho curso"
+                    );
+                }
+            );
     };
+
+    const handleAdd = () => {
+        const values = getValues();
+
+        if (values.courseId && values.teacherId) {
+            const newCourseSection = {
+                courseId: values.courseId,
+                teacherId: values.teacherId,
+                sectionId: selectedSection?.id || 0
+            };
+
+            from(createCourseSection.mutateAsync([newCourseSection]))
+                .pipe(
+                    switchMap(() => from(getAllCoursesSectionBySection.mutateAsync(selectedSection?.id || 0)))
+                )
+                .subscribe(
+                    (fetchedData) => {
+                        const transformedData = fetchedData.map(item => ({
+                            courseId: item.course.id,
+                            teacherId: item.teacher.id,
+                            id: item.id
+                        }));
+                        setData(transformedData);
+                        reset();
+                        setRefKey(prevKey => prevKey + 1);
+                        successModal.openModal(
+                            undefined,
+                            undefined,
+                            "Operación exitosa",
+                            "Sección de dicho curso agregada con éxito"
+                        );
+                    },
+                    (error) => {
+                        console.error("Error al agregar una entrada:", error);
+                        successModal.openModal(
+                            undefined,
+                            undefined,
+                            "Ocurrió un error",
+                            "No se pudo agregar la sección de dicho curso"
+                        );
+                    }
+                );
+        }
+    };
+
 
     const startEditing = (index: number) => {
         reset(data[index]);
@@ -77,11 +231,6 @@ export const SectionsTable: React.FC = () => {
         setEditingIndex(null);
     };
 
-    const deleteEntry = (index: number) => {
-        const newData = [...data];
-        newData.splice(index, 1);
-        setData(newData);
-    };
 
     const getCourseNameById = (courseId: number) => {
         const course = courses.find(c => c.id === courseId);
@@ -107,18 +256,20 @@ export const SectionsTable: React.FC = () => {
                 withAction={false}
                 withPagination={false}
             >
-                <TableRow>
+                <TableRow key={refKey}>
                     {['courseId', 'teacherId'].map(name => (
                         <TableCell key={name}>
                             <Controller
                                 name={name as keyof Entry}
                                 control={control}
                                 render={({ field }) => {
-                                    const [localValue, setLocalValue] = useState<{ id: number; name: string } | null>(null);
-
+                                    const [localValues, setLocalValues] = useState<{ [key: string]: { id: number; name: string } | null }>({
+                                        courseId: null,
+                                        teacherId: null
+                                    });
                                     return (
                                         <Autocomplete
-                                            value={localValue}
+                                            value={localValues[name]}
                                             fullWidth
                                             options={
                                                 name === 'courseId' ?
@@ -131,7 +282,7 @@ export const SectionsTable: React.FC = () => {
                                             }
                                             onChange={(_, newValue) => {
                                                 field.onChange(newValue?.id || "");
-                                                setLocalValue(newValue);
+                                                setLocalValues(prev => ({ ...prev, [name]: newValue }));
                                             }}
                                         />
                                     );
@@ -171,7 +322,9 @@ export const SectionsTable: React.FC = () => {
                                             const newData = [...data];
                                             newData[index][name as keyof Entry] = newValue?.id || 0;
                                             setData(newData);
+                                            setValue(name as keyof Entry, newValue?.id || 0);
                                         }}
+
                                     />
                                 ) : (
                                     name === 'courseId' ? getCourseNameById(entry.courseId) : getTeacherNameById(entry.teacherId)
@@ -202,6 +355,23 @@ export const SectionsTable: React.FC = () => {
                     </TableRow>
                 ))}
             </Table>
+            <ConfirmationModal
+                height={230}
+                title={confirmationDeleteModal.modalTitle}
+                handleOnConfirm={confirmationDeleteModal.handleOnConfirm}
+                open={confirmationDeleteModal.isOpen}
+                handleOnClose={confirmationDeleteModal.closeModal}
+                message={confirmationDeleteModal.message}
+                isProcessing={confirmationDeleteModal.isProcessing}
+            ></ConfirmationModal>
+            <OkModal
+                height={230}
+                open={successModal.isOpen}
+                handleOnClose={successModal.closeModal}
+                message={successModal.message}
+            >
+                {successModal.modalTitle}
+            </OkModal>
         </>
     );
 };

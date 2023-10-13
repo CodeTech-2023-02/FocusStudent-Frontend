@@ -3,26 +3,26 @@ import { courseSectionRepository } from "../repositories/course_section-reposito
 import { ICourseSection, ICourseSectionTeacher, IResponseCourseSection } from "../constants/interfaces";
 
 export function useCreateCourseSection() {
-  return useMutation<IResponseCourseSection, Error, ICourseSection>({
-    mutationFn: (data: ICourseSection) =>
+  return useMutation<IResponseCourseSection, Error, ICourseSection[]>({
+    mutationFn: (data: ICourseSection[]) =>
     courseSectionRepository.createCourseSection(data).then((response) => response.body),
   });
 }
 
 export function useEditCourseSection() {
   return useMutation<
-  ICourseSectionTeacher,
+  IResponseCourseSection,
     Error,
-    { courseSectionId: number; data: ICourseSection[] }
+    {  data: ICourseSection[] }
   >({
-    mutationFn: ({ courseSectionId, data }) =>
-    courseSectionRepository.editCourseSection(courseSectionId, data).then((response) => response.body),
+    mutationFn: ({  data }) =>
+    courseSectionRepository.editCourseSection( data).then((response) => response.body),
   });
 }
 
 export function useDeleteCourseSection() {
-  return useMutation<IResponseCourseSection, Error, number>({
-    mutationFn: (courseSectionId: number) =>
+  return useMutation<IResponseCourseSection, Error, number[]>({
+    mutationFn: (courseSectionId: number[]) =>
     courseSectionRepository.deleteCourseSection(courseSectionId).then((response) => response.body),
   });
 }

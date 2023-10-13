@@ -18,7 +18,7 @@ class CourseSectionRepository {
   constructor(private httpClient: HttpClient) {}
 
   createCourseSection = (
-    data: ICourseSection
+    data: ICourseSection[]
   ): Promise<HttpResponse<IResponseCourseSection>> => {
     const url = buildUrl(CourseSectionEndpoints.course_section);
     const headers = UtilsHttp.BaseHeaders();
@@ -31,10 +31,9 @@ class CourseSectionRepository {
   };
 
   editCourseSection = (
-    courseSectionId: number,
     data: ICourseSection[]
-  ): Promise<HttpResponse<ICourseSectionTeacher>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section, courseSectionId.toString());
+  ): Promise<HttpResponse<IResponseCourseSection>> => {
+    const url = buildUrl(CourseSectionEndpoints.course_section,);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.PUT,
@@ -44,13 +43,14 @@ class CourseSectionRepository {
     });
   };
 
-  deleteCourseSection = (courseSectionId: number): Promise<HttpResponse<IResponseCourseSection>> => {
-    const url = buildUrl(CourseSectionEndpoints.course_section, courseSectionId.toString());
+  deleteCourseSection = (courseSectionId: number[]): Promise<HttpResponse<IResponseCourseSection>> => {
+    const url = buildUrl(CourseSectionEndpoints.course_section, CourseSectionEndpoints.courseSectionId);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.DELETE,
       url,
       headers,
+      body: courseSectionId,
     });
   };
 

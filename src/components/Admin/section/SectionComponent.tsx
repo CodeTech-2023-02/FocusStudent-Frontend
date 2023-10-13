@@ -1,20 +1,15 @@
 import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import React from "react";
 import { ConfirmationModal, OkModal } from "../../../abstracts/Modals/Modals";
-import {
-  useCreateCourse,
-  useDeleteCourse,
-  useEditCourse,
-  useGetAllCourses,
-} from "../../../domain/course/services/course-service";
+import { useDeleteSection, useGetAllSections } from "../../../domain/section/services/section-services";
 import useModal from "../../../hooks/useModal";
 import SectionCard from "./Card/SectionCard";
 import { SectionFormDialog } from "./Dialogs/SectionFormDialog";
 import { ISectionForm } from "./ISectionForm";
-import { useDeleteSection, useGetAllSections } from "../../../domain/section/services/section-services";
 
 const SectionComponent: React.FC = () => {
   const confirmationDeleteModal = useModal();
+  const successModal = useModal();
   const [loading, setLoading] = React.useState(true);
   const [courses, setCourses] = React.useState<ISectionForm[]>([]);
 
@@ -24,8 +19,7 @@ const SectionComponent: React.FC = () => {
   const deleteSectionMutation = useDeleteSection();
 
   const [openDialog, setOpenDialog] = React.useState(false);
-  const successModal = useModal();
-  const [selectedCourse, setSelectedCourse] = React.useState<
+  const [selectedSection, setSelectedSection] = React.useState<
     ISectionForm | undefined
   >();
 
@@ -54,25 +48,25 @@ const SectionComponent: React.FC = () => {
 
   const handleCreateCourse = () => {
     setDialogMode("create");
-    setSelectedCourse(undefined);
+    setSelectedSection(undefined);
     setOpenDialog(true);
   };
 
   const handleConfig = (course: ISectionForm) => {
     setDialogMode("config");
-    setSelectedCourse(course);
+    setSelectedSection(course);
     setOpenDialog(true);
   };
 
   const handleEdit = (course: ISectionForm) => {
     setDialogMode("edit");
-    setSelectedCourse(course);
+    setSelectedSection(course);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setSelectedCourse(undefined);
+    setSelectedSection(undefined);
     setDialogMode("create");
   };
 
@@ -148,13 +142,13 @@ const SectionComponent: React.FC = () => {
           )}
         </Grid>
         <SectionFormDialog
-          key={selectedCourse ? selectedCourse.name : "new-course"}
+          key={selectedSection ? selectedSection.name : "new-course"}
           open={openDialog}
           onClose={handleCloseDialog}
           onSubmit={handleSubmitCourse}
           mode={dialogMode}
           refetch={fetchCourses}
-          selectedCourse={selectedCourse}
+          selectedSection={selectedSection}
         />
         <ConfirmationModal
           height={230}

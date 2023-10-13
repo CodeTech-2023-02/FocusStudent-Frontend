@@ -9,6 +9,8 @@ export const STUDENTS = "/students";
 export const REPORT = "/report";
 export const POLICY = "/policy";
 export const SECTION = "/section";
+export const LECTION = "/lection/:id";
+
 
 // Rutas específicas para estudiantes
 export const STUDENT_TRACKING = "/tracking";

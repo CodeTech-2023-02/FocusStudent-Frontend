@@ -1,11 +1,11 @@
-import { Box, Card, CardContent, IconButton, Grid, Drawer } from "@mui/material";
-import PeopleIcon from "@mui/icons-material/People";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import PeopleIcon from "@mui/icons-material/People";
+import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
-import { ICourseForm } from "../ICourseForm";
 import CourseDrawer from "../Drawer/CourseDrawer";
+import { ICourseForm } from "../ICourseForm";
 
 interface CourseCardProps {
   course: ICourseForm;
@@ -85,7 +85,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </Grid>
       </CardContent>
       {role === 'TEACHER' && (
-        <CourseDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
+        <CourseDrawer isOpen={drawerOpen} selectedCourse={course} onClose={() => setDrawerOpen(false)} />
       )}
     </Card>
   );

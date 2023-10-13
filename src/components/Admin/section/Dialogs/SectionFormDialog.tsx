@@ -13,7 +13,7 @@ interface SectionFormDialogProps {
   onSubmit: (data: ISectionForm) => void;
   mode: "create" | "edit" | "config";
   refetch?: () => void;
-  selectedCourse?: ISectionForm;
+  selectedSection?: ISectionForm;
 }
 
 export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
@@ -22,7 +22,7 @@ export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
   onSubmit,
   mode,
   refetch,
-  selectedCourse
+  selectedSection: selectedSection
 }) => {
 
   const [courseName, setCourseName] = React.useState("");
@@ -60,9 +60,9 @@ export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
           );
         }
       });
-    } else if (mode === "edit" && selectedCourse && selectedCourse.id) {
+    } else if (mode === "edit" && selectedSection && selectedSection.id) {
       editSectionMutation.mutate(
-        { sectionId: selectedCourse.id, data: { name: courseName } },
+        { sectionId: selectedSection.id, data: { name: courseName } },
         {
           onSuccess: () => {
             successModal.openModal(
@@ -94,10 +94,10 @@ export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
   };
 
   React.useEffect(() => {
-    if (mode === "edit" && selectedCourse) {
-      setCourseName(selectedCourse.name);
+    if (mode === "edit" && selectedSection) {
+      setCourseName(selectedSection.name);
     }
-  }, [mode, selectedCourse]);
+  }, [mode, selectedSection]);
 
 
   const handleClose = () => {
@@ -125,19 +125,24 @@ export const SectionFormDialog: React.FC<SectionFormDialogProps> = ({
                 onChange={(e) => setCourseName(e.target.value)}
               />
             ) : (
-              <SectionsTable />
+              <SectionsTable selectedSection={selectedSection}  />
             )}
           </Grid>
           <Grid item xs={12}>
             <Box display="flex" justifyContent="space-between">
-              <Button variant="contained" color="primary" type="submit">
-                Guardar
-              </Button>
-              <Button variant="contained" onClick={handleClose}>
-                Cancelar
-              </Button>
+              {mode !== "config" && (
+                <>
+                  <Button variant="contained" color="primary" type="submit">
+                    Guardar
+                  </Button>
+                  <Button variant="contained" onClick={handleClose}>
+                    Cancelar
+                  </Button>
+                </>
+              )}
             </Box>
           </Grid>
+
         </Grid>
       </form>
       <OkModal

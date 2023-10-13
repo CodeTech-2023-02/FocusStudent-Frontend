@@ -20,6 +20,7 @@ import {
   STUDENTS,
   UNAUTHORIZED,
   SECTION,
+  LECTION,
 } from "./constants/routes";
 import { useAuth } from "./state/AuthContext";
 import ThemeProvider from "./theme/ThemeProvider";
@@ -29,6 +30,7 @@ import Support from "./components/Auth/Support";
 import Unauthorized from "./components/Common/Unauthorized";
 import NotFound from "./components/Common/NotFound";
 import SectionComponent from "./components/Admin/section/SectionComponent";
+import LectionComponent from "./components/Teacher/lection/LectionComponent";
 
 const AppRouter: React.FC = () => {
   const auth = useAuth();
@@ -45,8 +47,10 @@ const AppRouter: React.FC = () => {
               isLoggedIn ? (
                 <Navigate
                   to={
-                    isLoggedIn.role === Roles.TEACHER || isLoggedIn.role === Roles.ADMIN ? DASHBOARD : DASHBOARD
-
+                    isLoggedIn.role === Roles.TEACHER ||
+                      isLoggedIn.role === Roles.ADMIN
+                      ? DASHBOARD
+                      : DASHBOARD
                   }
                 />
               ) : (
@@ -59,11 +63,7 @@ const AppRouter: React.FC = () => {
             element={
               isLoggedIn ? (
                 <Navigate
-                  to={
-                    isLoggedIn.role === Roles.STUDENT
-                      ? DASHBOARD
-                      : DASHBOARD
-                  }
+                  to={isLoggedIn.role === Roles.STUDENT ? DASHBOARD : DASHBOARD}
                 />
               ) : (
                 <Login />
@@ -75,18 +75,19 @@ const AppRouter: React.FC = () => {
             element={
               isLoggedIn ? (
                 <Navigate
-                  to={
-                    isLoggedIn.role === Roles.STUDENT
-                      ? DASHBOARD
-                      : DASHBOARD
-                  }
+                  to={isLoggedIn.role === Roles.STUDENT ? DASHBOARD : DASHBOARD}
                 />
               ) : (
                 <Support />
               )
             }
           />
-          <Route path="*" element={<NotFound role={isLoggedIn ? isLoggedIn.role : undefined} />} />
+          <Route
+            path="*"
+            element={
+              <NotFound role={isLoggedIn ? isLoggedIn.role : undefined} />
+            }
+          />
 
           {/* SidebarLayout wrapping the nested routes */}
           <Route element={<SidebarLayout />}>
@@ -135,6 +136,14 @@ const AppRouter: React.FC = () => {
               element={
                 <ProtectedElement roles={["TEACHER", "ADMIN"]}>
                   <PolicyComponent />
+                </ProtectedElement>
+              }
+            />
+            <Route
+              path={LECTION}
+              element={
+                <ProtectedElement roles={["TEACHER"]}>
+                  <LectionComponent />
                 </ProtectedElement>
               }
             />
