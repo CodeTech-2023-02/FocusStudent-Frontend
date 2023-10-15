@@ -20,9 +20,34 @@ export interface IRegister {
   email: string;
   address: string;
   password: string;
-  sectionId: number;
+  sectionId?: number;
 }
 
 export interface IRegisterResponse {
   message: string;
+}
+
+export interface IUpdateUser {
+  names:       string;
+  lastNames:   string;
+  phoneNumber: string;
+  dni:         string;
+  email:       string;
+  address:     string;
+  sectionId:   number;
+  studentId:   number;
+}
+
+export interface IChangePassword {
+  password: string;
+}
+
+export interface IGetUsers {
+  id:          number;
+  names:       string;
+  lastNames:   string;
+  phoneNumber: string;
+  dni:         string;
+  email:       string;
+  address:     string;
 }

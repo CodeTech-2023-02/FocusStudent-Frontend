@@ -8,7 +8,7 @@ import StudentDashboard from "./components/Student/StudentDashboard";
 import TrackingComponent from "./components/Student/tracking/TrackingComponent";
 import TeacherDashboard from "./components/Teacher/TeacherDashboard";
 import CourseComponent from "./components/Teacher/course/CourseComponent";
-import StudentsComponent from "./components/Teacher/students/StudentsComponent";
+
 import { Roles } from "./constants/roles";
 import {
   LOGIN,
@@ -21,6 +21,8 @@ import {
   UNAUTHORIZED,
   SECTION,
   LECTION,
+  STUDENT_TRACKING,
+  TEACHERS,
 } from "./constants/routes";
 import { useAuth } from "./state/AuthContext";
 import ThemeProvider from "./theme/ThemeProvider";
@@ -31,6 +33,7 @@ import Unauthorized from "./components/Common/Unauthorized";
 import NotFound from "./components/Common/NotFound";
 import SectionComponent from "./components/Admin/section/SectionComponent";
 import LectionComponent from "./components/Teacher/lesson/LessonComponent";
+import UsersComponent from "./components/Admin/users/UsersComponent";
 
 const AppRouter: React.FC = () => {
   const auth = useAuth();
@@ -45,14 +48,7 @@ const AppRouter: React.FC = () => {
             path={ROOT}
             element={
               isLoggedIn ? (
-                <Navigate
-                  to={
-                    isLoggedIn.role === Roles.TEACHER ||
-                    isLoggedIn.role === Roles.ADMIN
-                      ? DASHBOARD
-                      : DASHBOARD
-                  }
-                />
+                <Navigate to={DASHBOARD} />
               ) : (
                 <Navigate to={LOGIN} />
               )
@@ -62,9 +58,7 @@ const AppRouter: React.FC = () => {
             path={LOGIN}
             element={
               isLoggedIn ? (
-                <Navigate
-                  to={isLoggedIn.role === Roles.STUDENT ? DASHBOARD : DASHBOARD}
-                />
+                <Navigate to={DASHBOARD} />
               ) : (
                 <Login />
               )
@@ -72,15 +66,7 @@ const AppRouter: React.FC = () => {
           />
           <Route
             path="/support"
-            element={
-              isLoggedIn ? (
-                <Navigate
-                  to={isLoggedIn.role === Roles.STUDENT ? DASHBOARD : DASHBOARD}
-                />
-              ) : (
-                <Support />
-              )
-            }
+            element={<Support />}
           />
           <Route
             path="*"
@@ -94,15 +80,24 @@ const AppRouter: React.FC = () => {
             <Route
               path={DASHBOARD}
               element={
-                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
-                  <TeacherDashboard />
-                </ProtectedElement>
+                isLoggedIn ? (
+                  isLoggedIn.role === Roles.STUDENT ? (
+                    <ProtectedElement roles={["STUDENT"]}>
+                      <StudentDashboard />
+                    </ProtectedElement>
+                  ) : (
+                    <ProtectedElement roles={["TEACHER", "ADMIN"]}>
+                      <TeacherDashboard />
+                    </ProtectedElement>
+                  )
+                ) : <Navigate to={LOGIN} />
               }
             />
+
             <Route
               path={COURSE}
               element={
-                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
+                <ProtectedElement roles={["TEACHER", "ADMIN", "STUDENT"]}>
                   <CourseComponent />
                 </ProtectedElement>
               }
@@ -119,14 +114,22 @@ const AppRouter: React.FC = () => {
               path={STUDENTS}
               element={
                 <ProtectedElement roles={["TEACHER", "ADMIN"]}>
-                  <StudentsComponent />
+                  <UsersComponent userType="students" />
+                </ProtectedElement>
+              }
+            />
+            <Route
+              path={TEACHERS}
+              element={
+                <ProtectedElement roles={["ADMIN"]}>
+                  <UsersComponent  userType="teachers"/>
                 </ProtectedElement>
               }
             />
             <Route
               path={REPORT}
               element={
-                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
+                <ProtectedElement roles={["TEACHER", "ADMIN", "STUDENT"]}>
                   <ReportComponent />
                 </ProtectedElement>
               }
@@ -134,7 +137,7 @@ const AppRouter: React.FC = () => {
             <Route
               path={POLICY}
               element={
-                <ProtectedElement roles={["TEACHER", "ADMIN"]}>
+                <ProtectedElement roles={["TEACHER", "ADMIN", "STUDENT"]}>
                   <PolicyComponent />
                 </ProtectedElement>
               }
@@ -147,44 +150,11 @@ const AppRouter: React.FC = () => {
                 </ProtectedElement>
               }
             />
-
             <Route
-              path={DASHBOARD}
-              element={
-                <ProtectedElement roles={["STUDENT"]}>
-                  <StudentDashboard />
-                </ProtectedElement>
-              }
-            />
-            <Route
-              path={`${DASHBOARD}/course`}
-              element={
-                <ProtectedElement roles={["STUDENT"]}>
-                  <CourseComponent />
-                </ProtectedElement>
-              }
-            />
-            <Route
-              path={`${DASHBOARD}/tracking`}
+              path={STUDENT_TRACKING}
               element={
                 <ProtectedElement roles={["STUDENT"]}>
                   <TrackingComponent />
-                </ProtectedElement>
-              }
-            />
-            <Route
-              path={`${DASHBOARD}/reports`}
-              element={
-                <ProtectedElement roles={["STUDENT"]}>
-                  <ReportComponent />
-                </ProtectedElement>
-              }
-            />
-            <Route
-              path={`${DASHBOARD}/policy`}
-              element={
-                <ProtectedElement roles={["STUDENT"]}>
-                  <PolicyComponent />
                 </ProtectedElement>
               }
             />
@@ -195,5 +165,6 @@ const AppRouter: React.FC = () => {
     </ThemeProvider>
   );
 };
+
 
 export default AppRouter;

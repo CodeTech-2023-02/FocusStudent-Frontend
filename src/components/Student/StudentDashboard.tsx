@@ -1,7 +1,7 @@
 // components/Student/dashboard/StudentDashboard.tsx
 
 const StudentDashboard: React.FC = () => {
-  return <div></div>;
+  return <div>gaaa</div>;
 };
 
 export default StudentDashboard;

@@ -8,11 +8,11 @@ import {
   COURSE,
   DASHBOARD,
   POLICY,
-  REPORT,
   SECTION,
   STUDENTS,
-  STUDENT_REPORTS,
+  REPORT,
   STUDENT_TRACKING,
+  TEACHERS,
 } from "../../constants/routes";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { useAuth } from "../../state/AuthContext";
@@ -171,6 +171,7 @@ function SidebarMenu() {
     { path: DASHBOARD, label: "Dashboard" },
     { path: COURSE, label: "Cursos" },
     { path: STUDENTS, label: "Estudiantes" },
+    { path: TEACHERS, label: "Profesores"},
     { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },
   ];
@@ -181,7 +182,7 @@ function SidebarMenu() {
     { path: DASHBOARD, label: "Dashboard" },
     { path: STUDENT_TRACKING, label: "Tracking" },
     { path: COURSE, label: "Cursos" },
-    { path: STUDENT_REPORTS, label: "Reportes" },
+    { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },
   ];
 

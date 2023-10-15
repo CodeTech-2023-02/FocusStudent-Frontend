@@ -1,21 +1,21 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import DeleteIcon from "@mui/icons-material/Delete";
+import PasswordIcon from '@mui/icons-material/Password';
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
-import { IStudentForm } from "../IStudentForm";
+import { IUsersForm } from "../interfaces";
 
 interface StudentCardProps {
-  course: IStudentForm;
-  onEdit: (course: IStudentForm) => void;
-  onDelete: (course: IStudentForm) => void;
+  user: IUsersForm;
+  onEdit: (course: IUsersForm) => void;
+  changePassword: (course: IUsersForm) => void;
 }
 
-const StudentCard: React.FC<StudentCardProps> = ({
-  course,
+const UsersCard: React.FC<StudentCardProps> = ({
+  user: course,
   onEdit,
-  onDelete,
+  changePassword,
 }) => {
   const [showActions, setShowActions] = React.useState(false);
 
@@ -45,7 +45,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
           >
             <Box textAlign="center">ID: {course.id}</Box>
             <Box textAlign="center">
-              {course.nombre} {course.apellido}{" "}
+              {course.names} {course.lastNames}{" "}
             </Box>
           </Grid>
           <Grid
@@ -60,8 +60,8 @@ const StudentCard: React.FC<StudentCardProps> = ({
                 <IconButton color="primary" onClick={() => onEdit(course)}>
                   <EditIcon sx={{ fontSize: 22 }} />
                 </IconButton>
-                <IconButton color="error" onClick={() => onDelete(course)}>
-                  <DeleteIcon sx={{ fontSize: 22 }} />
+                <IconButton color="info" onClick={() => changePassword(course)}>
+                  <PasswordIcon sx={{ fontSize: 22 }} />
                 </IconButton>
               </>
             ) : (
@@ -73,4 +73,4 @@ const StudentCard: React.FC<StudentCardProps> = ({
     </Card>
   );
 };
-export default StudentCard;
+export default UsersCard;

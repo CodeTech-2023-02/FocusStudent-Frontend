@@ -7,10 +7,13 @@ import {
 } from "../../../infra/interfaces";
 import { AuthEndpoints } from "../constants/endpoint";
 import {
+  IChangePassword,
+  IGetUsers,
   ILogin,
   ILoginResponse,
   IRegister,
   IRegisterResponse,
+  IUpdateUser,
 } from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
@@ -43,6 +46,53 @@ class AuthRepository {
       body: data,
     });
   };
+
+  changePassword = (
+    id: number,
+    data: IChangePassword
+  ): Promise<HttpResponse<IRegisterResponse>> => {
+    const url = buildUrl(AuthEndpoints.user, id.toString(), AuthEndpoints.password);
+    const headers = UtilsHttp.BaseHeaders();
+    return this.httpClient.request({
+      method: HttpMethod.PUT,
+      url,
+      headers,
+      body: data,
+    });
+  }
+
+  updateUser = (
+    id: number,
+    data: IUpdateUser
+  ): Promise<HttpResponse<IRegisterResponse>> => {
+    const url = buildUrl(AuthEndpoints.user, id.toString());
+    const headers = UtilsHttp.BaseHeaders();
+    return this.httpClient.request({
+      method: HttpMethod.PUT,
+      url,
+      headers,
+      body: data,
+    });
+  }
+
+  getAllUsersByLastNamesAndRole = (
+    lastNames: string,
+    role: string
+  ): Promise<HttpResponse<IGetUsers[]>> => {
+    const url = buildUrl(
+      AuthEndpoints.user,
+      AuthEndpoints.rol,
+      role,
+      AuthEndpoints.lastnames,
+      lastNames,
+    );
+    const headers = UtilsHttp.BaseHeaders();
+    return this.httpClient.request({
+      method: HttpMethod.GET,
+      url,
+      headers,
+    });
+  }
 }
 
 const authRepository = new AuthRepository(axiosHttpClient);
