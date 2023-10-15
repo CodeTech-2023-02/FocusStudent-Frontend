@@ -47,27 +47,14 @@ const AppRouter: React.FC = () => {
           <Route
             path={ROOT}
             element={
-              isLoggedIn ? (
-                <Navigate to={DASHBOARD} />
-              ) : (
-                <Navigate to={LOGIN} />
-              )
+              isLoggedIn ? <Navigate to={DASHBOARD} /> : <Navigate to={LOGIN} />
             }
           />
           <Route
             path={LOGIN}
-            element={
-              isLoggedIn ? (
-                <Navigate to={DASHBOARD} />
-              ) : (
-                <Login />
-              )
-            }
+            element={isLoggedIn ? <Navigate to={DASHBOARD} /> : <Login />}
           />
-          <Route
-            path="/support"
-            element={<Support />}
-          />
+          <Route path="/support" element={<Support />} />
           <Route
             path="*"
             element={
@@ -90,7 +77,9 @@ const AppRouter: React.FC = () => {
                       <TeacherDashboard />
                     </ProtectedElement>
                   )
-                ) : <Navigate to={LOGIN} />
+                ) : (
+                  <Navigate to={LOGIN} />
+                )
               }
             />
 
@@ -122,7 +111,7 @@ const AppRouter: React.FC = () => {
               path={TEACHERS}
               element={
                 <ProtectedElement roles={["ADMIN"]}>
-                  <UsersComponent  userType="teachers"/>
+                  <UsersComponent userType="teachers" />
                 </ProtectedElement>
               }
             />
@@ -165,6 +154,5 @@ const AppRouter: React.FC = () => {
     </ThemeProvider>
   );
 };
-
 
 export default AppRouter;

@@ -28,7 +28,6 @@ export function useRegister() {
   });
 }
 
-
 export function useGetAllUsersByLastNamesAndRole() {
   return useMutation<IGetUsers[], Error, { lastNames: string; role: string }>({
     mutationFn: ({ lastNames, role }) => {
@@ -41,14 +40,22 @@ export function useGetAllUsersByLastNamesAndRole() {
 }
 
 export function useUpdateUser() {
-  return useMutation<IRegisterResponse, Error, { id: number; data: IUpdateUser }>({
+  return useMutation<
+    IRegisterResponse,
+    Error,
+    { id: number; data: IUpdateUser }
+  >({
     mutationFn: ({ id, data }) =>
       authRepository.updateUser(id, data).then((response) => response.body),
   });
 }
 
 export function useChangePassword() {
-  return useMutation<IRegisterResponse, Error, { id: number; data: IChangePassword }>({
+  return useMutation<
+    IRegisterResponse,
+    Error,
+    { id: number; data: IChangePassword }
+  >({
     mutationFn: ({ id, data }) =>
       authRepository.changePassword(id, data).then((response) => response.body),
   });

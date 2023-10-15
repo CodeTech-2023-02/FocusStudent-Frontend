@@ -1,5 +1,5 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PasswordIcon from '@mui/icons-material/Password';
+import PasswordIcon from "@mui/icons-material/Password";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";

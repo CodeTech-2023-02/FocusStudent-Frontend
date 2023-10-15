@@ -28,14 +28,14 @@ export interface IRegisterResponse {
 }
 
 export interface IUpdateUser {
-  names:       string;
-  lastNames:   string;
+  names: string;
+  lastNames: string;
   phoneNumber: string;
-  dni:         string;
-  email:       string;
-  address:     string;
-  sectionId:   number;
-  studentId:   number;
+  dni: string;
+  email: string;
+  address: string;
+  sectionId: number;
+  studentId: number;
 }
 
 export interface IChangePassword {
@@ -43,11 +43,11 @@ export interface IChangePassword {
 }
 
 export interface IGetUsers {
-  id:          number;
-  names:       string;
-  lastNames:   string;
+  id: number;
+  names: string;
+  lastNames: string;
   phoneNumber: string;
-  dni:         string;
-  email:       string;
-  address:     string;
+  dni: string;
+  email: string;
+  address: string;
 }

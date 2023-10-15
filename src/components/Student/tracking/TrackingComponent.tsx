@@ -11,9 +11,14 @@ import {
 } from "@mui/material";
 import * as faceapi from "face-api.js";
 import React, { useEffect, useRef, useState } from "react";
-import { openDB } from 'idb';
+import { openDB } from "idb";
 import { useAuth } from "../../../state/AuthContext";
-import { ConcentrateStatus, FaceStatus, TimeStatus, TrackingData } from "./interfaces";
+import {
+  ConcentrateStatus,
+  FaceStatus,
+  TimeStatus,
+  TrackingData,
+} from "./interfaces";
 
 interface ExpressionData {
   neutral: number;
@@ -25,8 +30,6 @@ interface ExpressionData {
   surprised: number;
 }
 
-
-
 const TrackingComponent: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -37,9 +40,8 @@ const TrackingComponent: React.FC = () => {
   const { currentUser } = useAuth();
   const userId = currentUser?.id || 0;
 
-  const DATABASE_NAME = 'faceTrackingDB';
-  const STORE_NAME = 'trackingData';
-
+  const DATABASE_NAME = "faceTrackingDB";
+  const STORE_NAME = "trackingData";
 
   useEffect(() => {
     // Inicializa la base de datos al cargar el componente
@@ -49,7 +51,7 @@ const TrackingComponent: React.FC = () => {
           if (!db.objectStoreNames.contains(STORE_NAME)) {
             db.createObjectStore(STORE_NAME, { autoIncrement: true });
           }
-        }
+        },
       });
     }
 
@@ -58,18 +60,17 @@ const TrackingComponent: React.FC = () => {
 
   const addToDatabase = async (data: ExpressionData, key: any) => {
     const db = await openDB(DATABASE_NAME, 1);
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const tx = db.transaction(STORE_NAME, "readwrite");
     await tx.store.add(data, key);
     await tx.done;
   };
 
   const clearDatabase = async () => {
     const db = await openDB(DATABASE_NAME, 1);
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const tx = db.transaction(STORE_NAME, "readwrite");
     tx.store.clear();
     await tx.done;
   };
-  
 
   const getAllFromDatabase = async () => {
     const db = await openDB(DATABASE_NAME, 1);
@@ -126,8 +127,7 @@ const TrackingComponent: React.FC = () => {
           .withFaceLandmarks()
           .withFaceExpressions();
 
-
-        const expressionsData = detections.map(det => det.expressions);
+        const expressionsData = detections.map((det) => det.expressions);
 
         for (const expression of expressionsData) {
           const timestampKey = new Date().getTime();
@@ -155,7 +155,6 @@ const TrackingComponent: React.FC = () => {
     setSelectedDevice(e.target.value as string | null);
   };
 
-  
   const handleStartClick = () => {
     if (selectedDevice) {
       startVideo(selectedDevice);
@@ -167,28 +166,31 @@ const TrackingComponent: React.FC = () => {
       const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
       tracks.forEach((track) => track.stop());
     }
-  
+
     if (intervalId) {
       clearInterval(intervalId);
     }
-  
+
     const storedData = await getAllFromDatabase();
-  
-    const analysis = analyze_data_fixed({ studentId: userId, trackingData: storedData });
-  
-    console.log("Analysis Result:", analysis);
-  
-    const studentData = [{
+
+    const analysis = analyze_data_fixed({
       studentId: userId,
-      analysis: analysis
-    }];
-  
+      trackingData: storedData,
+    });
+
+    console.log("Analysis Result:", analysis);
+
+    const studentData = [
+      {
+        studentId: userId,
+        analysis: analysis,
+      },
+    ];
+
     console.log("JSON Data:", studentData);
-    
 
     await clearDatabase();
   };
-  
 
   const analyze_data_fixed = (data: TrackingData) => {
     const trackingData = data.trackingData;
@@ -200,8 +202,8 @@ const TrackingComponent: React.FC = () => {
     } else {
       segments = [
         trackingData.slice(0, Math.floor(n / 3)),
-        trackingData.slice(Math.floor(n / 3), Math.floor(2 * n / 3)),
-        trackingData.slice(Math.floor(2 * n / 3))
+        trackingData.slice(Math.floor(n / 3), Math.floor((2 * n) / 3)),
+        trackingData.slice(Math.floor((2 * n) / 3)),
       ];
     }
 
@@ -228,10 +230,18 @@ const TrackingComponent: React.FC = () => {
       if (n < 3) {
         timeStatus = TimeStatus.middle;
       } else {
-        timeStatus = idx === 0 ? TimeStatus.begin : idx === 1 ? TimeStatus.middle : TimeStatus.end;
+        timeStatus =
+          idx === 0
+            ? TimeStatus.begin
+            : idx === 1
+            ? TimeStatus.middle
+            : TimeStatus.end;
       }
 
-      const concentrateStatus = (avgEmotions["neutral"] > 0.6 || avgEmotions["surprised"] > 0.6) ? ConcentrateStatus.concentrate : ConcentrateStatus.desconcentrate;
+      const concentrateStatus =
+        avgEmotions["neutral"] > 0.6 || avgEmotions["surprised"] > 0.6
+          ? ConcentrateStatus.concentrate
+          : ConcentrateStatus.desconcentrate;
 
       let maxEmotion = "neutral";
       for (const emotion in avgEmotions) {
@@ -244,13 +254,12 @@ const TrackingComponent: React.FC = () => {
       results.push({
         timeStatus: timeStatus,
         concentrateStatus: concentrateStatus,
-        faceStatus: faceStatus
+        faceStatus: faceStatus,
       });
     }
 
     return results;
   };
-
 
   return (
     <Container>

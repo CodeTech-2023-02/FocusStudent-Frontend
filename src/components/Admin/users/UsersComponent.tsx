@@ -22,7 +22,7 @@ const mapTeacherToUsersForm = (teacher: ITeacher): IUsersForm => {
     email: teacher.user.email,
     dni: teacher.user.dni,
     address: teacher.user.address,
-    password: ''
+    password: "",
   };
 };
 
@@ -35,35 +35,37 @@ const mapDataToUsersForm = (data: IGetUsers): IUsersForm => {
     email: data.email,
     dni: data.dni,
     address: data.address,
-    password: ''
+    password: "",
   };
 };
 
-
-const UsersComponent: React.FC<{ userType: 'students' | 'teachers' }> = ({ userType }) => {
-
-  const title = userType === 'students' ? 'Estudiantes' : 'Profesores';
-  const usuario = userType === 'students' ? 'estudiante' : 'profesor';
+const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
+  userType,
+}) => {
+  const title = userType === "students" ? "Estudiantes" : "Profesores";
+  const usuario = userType === "students" ? "estudiante" : "profesor";
   const getTeachers = useGetAllTeachers();
 
-  const getAllUsersByLastNamesAndRoleMutation = useGetAllUsersByLastNamesAndRole();
+  const getAllUsersByLastNamesAndRoleMutation =
+    useGetAllUsersByLastNamesAndRole();
 
   const confirmationDeleteModal = useModal();
   const [users, setUsers] = React.useState<IUsersForm[]>([]);
 
   const fetchUsersData = () => {
-    if (userType === 'teachers') {
+    if (userType === "teachers") {
       getTeachers.mutate();
-    } else if (userType === 'students') {
+    } else if (userType === "students") {
       //getStudents.mutate();
     }
   };
 
   const fetchAndMapUsers = React.useCallback(() => {
-    if (userType === 'teachers' && getTeachers.data) {
+    if (userType === "teachers" && getTeachers.data) {
       const mappedUsers = getTeachers.data.map(mapTeacherToUsersForm);
       setUsers(mappedUsers);
-    } else if (userType === 'students') { //  && getStudents.data
+    } else if (userType === "students") {
+      //  && getStudents.data
       //const mappedUsers = getStudents.data.map(mapStudentToUsersForm); // Assuming you create a similar function to map students.
       //setUsers(mappedUsers);
     }
@@ -79,15 +81,16 @@ const UsersComponent: React.FC<{ userType: 'students' | 'teachers' }> = ({ userT
 
   React.useEffect(() => {
     if (getAllUsersByLastNamesAndRoleMutation.data) {
-      const mappedData = getAllUsersByLastNamesAndRoleMutation.data.map(mapDataToUsersForm);
+      const mappedData =
+        getAllUsersByLastNamesAndRoleMutation.data.map(mapDataToUsersForm);
       setUsers(mappedData);
     }
   }, [getAllUsersByLastNamesAndRoleMutation.data]);
 
-
   const [openDialog, setOpenDialog] = React.useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = React.useState(false);
-  const [selectedUserForPasswordChange, setSelectedUserForPasswordChange] = React.useState<IUsersForm | null>(null);
+  const [selectedUserForPasswordChange, setSelectedUserForPasswordChange] =
+    React.useState<IUsersForm | null>(null);
 
   const [selectedCourse, setSelectedCourse] = React.useState<
     IUsersForm | undefined
@@ -127,20 +130,24 @@ const UsersComponent: React.FC<{ userType: 'students' | 'teachers' }> = ({ userT
     handleCloseDialog();
   };
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value } = event.target;
     if (value.trimStart() !== value) {
       return;
     }
-    if (value === '') {
+    if (value === "") {
       fetchUsersData();
       return;
     }
     if (value.length % 3 === 0) {
-      getAllUsersByLastNamesAndRoleMutation.mutate({ lastNames: value, role: userType.toUpperCase() === 'TEACHERS' ? 'TEACHER' : 'STUDENT' });
+      getAllUsersByLastNamesAndRoleMutation.mutate({
+        lastNames: value,
+        role: userType.toUpperCase() === "TEACHERS" ? "TEACHER" : "STUDENT",
+      });
     }
   };
-
 
   return (
     <div>
@@ -168,26 +175,26 @@ const UsersComponent: React.FC<{ userType: 'students' | 'teachers' }> = ({ userT
           </Grid>
         </Grid>
         <Grid container spacing={3} pt={4}>
-        {users.map((user, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <UsersCard
-              user={user}
-              onEdit={handleEditCourse}
-              changePassword={() => handlePasswordChangeClick(user)}
-            />
-          </Grid>
-        ))}
-      </Grid>
-      {selectedUserForPasswordChange && (
-        <PasswordChangeDialog
-          open={isPasswordModalOpen}
-          onClose={() => {
-            setIsPasswordModalOpen(false);
-            setSelectedUserForPasswordChange(null);
-          }}
-          user={selectedUserForPasswordChange}
-        />
-      )}
+          {users.map((user, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <UsersCard
+                user={user}
+                onEdit={handleEditCourse}
+                changePassword={() => handlePasswordChangeClick(user)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        {selectedUserForPasswordChange && (
+          <PasswordChangeDialog
+            open={isPasswordModalOpen}
+            onClose={() => {
+              setIsPasswordModalOpen(false);
+              setSelectedUserForPasswordChange(null);
+            }}
+            user={selectedUserForPasswordChange}
+          />
+        )}
         <UsersFormDialog
           userType={userType}
           key={selectedCourse ? selectedCourse.id : "new-course"}

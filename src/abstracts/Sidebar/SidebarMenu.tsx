@@ -171,7 +171,7 @@ function SidebarMenu() {
     { path: DASHBOARD, label: "Dashboard" },
     { path: COURSE, label: "Cursos" },
     { path: STUDENTS, label: "Estudiantes" },
-    { path: TEACHERS, label: "Profesores"},
+    { path: TEACHERS, label: "Profesores" },
     { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },
   ];

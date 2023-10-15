@@ -51,7 +51,11 @@ class AuthRepository {
     id: number,
     data: IChangePassword
   ): Promise<HttpResponse<IRegisterResponse>> => {
-    const url = buildUrl(AuthEndpoints.user, id.toString(), AuthEndpoints.password);
+    const url = buildUrl(
+      AuthEndpoints.user,
+      id.toString(),
+      AuthEndpoints.password
+    );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
       method: HttpMethod.PUT,
@@ -59,7 +63,7 @@ class AuthRepository {
       headers,
       body: data,
     });
-  }
+  };
 
   updateUser = (
     id: number,
@@ -73,7 +77,7 @@ class AuthRepository {
       headers,
       body: data,
     });
-  }
+  };
 
   getAllUsersByLastNamesAndRole = (
     lastNames: string,
@@ -84,7 +88,7 @@ class AuthRepository {
       AuthEndpoints.rol,
       role,
       AuthEndpoints.lastnames,
-      lastNames,
+      lastNames
     );
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -92,7 +96,7 @@ class AuthRepository {
       url,
       headers,
     });
-  }
+  };
 }
 
 const authRepository = new AuthRepository(axiosHttpClient);
