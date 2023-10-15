@@ -188,14 +188,15 @@ function SidebarMenu() {
   if (currentUserRole.toUpperCase() === Roles.STUDENT) {
     routes = studentRoutes;
   } else if (currentUserRole.toUpperCase() === Roles.TEACHER) {
-    routes = teacherAdminRoutes;
+    routes = teacherAdminRoutes.filter(route => route.path !== TEACHERS);
   } else if (currentUserRole.toUpperCase() === Roles.ADMIN) {
     routes = [
       teacherAdminRoutes[0],
       adminRoutes[0],
-      ...teacherAdminRoutes.slice(1),
+      ...teacherAdminRoutes.slice(1).filter(route => route.path !== TEACHERS),
     ];
   }
+  
 
   return (
     <MenuWrapper>

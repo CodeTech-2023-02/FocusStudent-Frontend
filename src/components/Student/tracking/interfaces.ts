@@ -20,8 +20,8 @@ export enum TimeStatus {
 }
 
 export enum ConcentrateStatus {
-  desconcentrate = 0,
-  concentrate = 1,
+  desconcentrate = "DESCONCENTRATE",
+  concentrate = "CONCENTRATE",
 }
 
 export enum FaceStatus {

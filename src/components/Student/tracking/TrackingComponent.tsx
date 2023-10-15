@@ -20,6 +20,9 @@ import {
   TimeStatus,
   TrackingData,
 } from "./interfaces";
+import { useParams } from "react-router-dom";
+import { IAnalysis } from "../../../domain/detector/constants/interfaces";
+import { useCreateDetector } from "../../../domain/detector/services/detector-service";
 
 interface ExpressionData {
   neutral: number;
@@ -40,6 +43,12 @@ const TrackingComponent: React.FC = () => {
 
   const { currentUser } = useAuth();
   const userId = currentUser?.id || 0;
+
+  const { id: lessonId } = useParams();
+
+  const [start, setStart] = useState<Date | null>(null);
+
+  const createDetector = useCreateDetector();
 
   const DATABASE_NAME = "faceTrackingDB";
   const STORE_NAME = "trackingData";
@@ -159,6 +168,7 @@ const TrackingComponent: React.FC = () => {
   const handleStartClick = () => {
     if (selectedDevice) {
       startVideo(selectedDevice);
+      setStart(new Date());
     }
   };
 
@@ -178,17 +188,23 @@ const TrackingComponent: React.FC = () => {
       studentId: userId,
       trackingData: storedData,
     });
-
-    console.log("Analysis Result:", analysis);
-
-    const studentData = [
-      {
-        studentId: userId,
-        analysis: analysis,
+    debugger;
+    const analysisData: IAnalysis = {
+      start: start!,
+      end: new Date(), 
+      analyses: analysis,
+      studentId: userId,
+      lessonId: Number(lessonId), 
+    };
+    
+    createDetector.mutate(analysisData, {
+      onSuccess: () => {
+        console.log("Success");
       },
-    ];
-
-    console.log("JSON Data:", studentData);
+      onError: (error) => {
+        console.log("Error");
+      },
+    })
 
     await clearDatabase();
   };
