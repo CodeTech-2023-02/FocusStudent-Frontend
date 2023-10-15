@@ -8,7 +8,7 @@ export interface IUsersForm {
   email: string;
   dni: string;
   address: string;
-  password: string;
+  password?: string;
   sectionId?: number;
 }
 

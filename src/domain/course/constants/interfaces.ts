@@ -4,9 +4,6 @@ export interface ICreateEditCourse {
   description: string;
 }
 
-export interface IRegisterResponse {
-  message: string;
-}
 
 export interface IGetAllResponse {
   id: number;

@@ -17,3 +17,7 @@ export type GenericSuccessResponse = {
   code: number;
   status: string;
 };
+
+export interface GenericResponse{
+  message: string;
+}

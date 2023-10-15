@@ -8,11 +8,10 @@ import {
   COURSE,
   DASHBOARD,
   POLICY,
+  REPORT,
   SECTION,
   STUDENTS,
-  REPORT,
-  STUDENT_TRACKING,
-  TEACHERS,
+  TEACHERS
 } from "../../constants/routes";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { useAuth } from "../../state/AuthContext";
@@ -180,7 +179,6 @@ function SidebarMenu() {
 
   const studentRoutes = [
     { path: DASHBOARD, label: "Dashboard" },
-    { path: STUDENT_TRACKING, label: "Tracking" },
     { path: COURSE, label: "Cursos" },
     { path: REPORT, label: "Reportes" },
     { path: POLICY, label: "Políticas" },

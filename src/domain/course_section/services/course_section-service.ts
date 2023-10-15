@@ -3,11 +3,11 @@ import { courseSectionRepository } from "../repositories/course_section-reposito
 import {
   ICourseSection,
   ICourseSectionTeacher,
-  IResponseCourseSection,
 } from "../constants/interfaces";
+import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateCourseSection() {
-  return useMutation<IResponseCourseSection, Error, ICourseSection[]>({
+  return useMutation<GenericResponse, Error, ICourseSection[]>({
     mutationFn: (data: ICourseSection[]) =>
       courseSectionRepository
         .createCourseSection(data)
@@ -16,7 +16,7 @@ export function useCreateCourseSection() {
 }
 
 export function useEditCourseSection() {
-  return useMutation<IResponseCourseSection, Error, { data: ICourseSection[] }>(
+  return useMutation<GenericResponse, Error, { data: ICourseSection[] }>(
     {
       mutationFn: ({ data }) =>
         courseSectionRepository
@@ -27,7 +27,7 @@ export function useEditCourseSection() {
 }
 
 export function useDeleteCourseSection() {
-  return useMutation<IResponseCourseSection, Error, number[]>({
+  return useMutation<GenericResponse, Error, number[]>({
     mutationFn: (courseSectionId: number[]) =>
       courseSectionRepository
         .deleteCourseSection(courseSectionId)

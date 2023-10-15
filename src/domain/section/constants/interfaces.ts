@@ -7,6 +7,3 @@ export interface ISectionGet {
   name: string;
 }
 
-export interface ISectionResponse {
-  message: string;
-}

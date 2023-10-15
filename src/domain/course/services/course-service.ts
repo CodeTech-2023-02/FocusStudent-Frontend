@@ -3,11 +3,11 @@ import { courseRepository } from "../repositories/course-repository";
 import {
   ICreateEditCourse,
   IGetAllResponse,
-  IRegisterResponse,
 } from "../constants/interfaces";
+import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateCourse() {
-  return useMutation<IRegisterResponse, Error, ICreateEditCourse>({
+  return useMutation<GenericResponse, Error, ICreateEditCourse>({
     mutationFn: (data: ICreateEditCourse) =>
       courseRepository.create(data).then((response) => response.body),
   });
@@ -15,7 +15,7 @@ export function useCreateCourse() {
 
 export function useEditCourse() {
   return useMutation<
-    IRegisterResponse,
+  GenericResponse,
     Error,
     { courseId: number; data: ICreateEditCourse }
   >({
@@ -25,7 +25,7 @@ export function useEditCourse() {
 }
 
 export function useDeleteCourse() {
-  return useMutation<IRegisterResponse, Error, number>({
+  return useMutation<GenericResponse, Error, number>({
     mutationFn: (courseId: number) =>
       courseRepository.delete(courseId).then((response) => response.body),
   });

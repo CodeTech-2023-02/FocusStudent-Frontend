@@ -107,7 +107,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Operación exitosa",
               "Curso eliminado con éxito"
             );
@@ -120,7 +120,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Ocurrió un error",
               "No se pudo eliminar el curso"
             );
@@ -145,7 +145,7 @@ const CourseComponent: React.FC = () => {
             () => {
               successModal.closeModal();
             },
-            () => {},
+            () => { },
             "Operación exitosa",
             response.message
           );
@@ -158,7 +158,7 @@ const CourseComponent: React.FC = () => {
             () => {
               successModal.closeModal();
             },
-            () => {},
+            () => { },
             "Ocurrió un error",
             error.response.data.message
           );
@@ -177,7 +177,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Operación exitosa",
               "Curso editado con éxito"
             );
@@ -189,7 +189,7 @@ const CourseComponent: React.FC = () => {
               () => {
                 successModal.closeModal();
               },
-              () => {},
+              () => { },
               "Ocurrió un error",
               error.response.data.message
             );
@@ -203,9 +203,11 @@ const CourseComponent: React.FC = () => {
     <div>
       <Box p={4}>
         <h1>Cursos</h1>
-        <Button variant="outlined" onClick={handleCreateCourse}>
-          Crear nuevo curso
-        </Button>
+        {role !== "STUDENT" && (
+          <Button variant="outlined" onClick={handleCreateCourse}>
+            Crear nuevo curso
+          </Button>
+        )}
         <Grid container spacing={3} pt={4}>
           {loading ? (
             <CircularProgress />

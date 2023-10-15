@@ -1,6 +1,7 @@
 import { axiosHttpClient } from "../../../infra/http/axios-http-client";
 import { UtilsHttp } from "../../../infra/http/utils";
 import {
+  GenericResponse,
   HttpClient,
   HttpMethod,
   HttpResponse,
@@ -9,7 +10,6 @@ import { CourseSectionEndpoints } from "../constants/endpoint";
 import {
   ICourseSection,
   ICourseSectionTeacher,
-  IResponseCourseSection,
 } from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
@@ -23,7 +23,7 @@ class CourseSectionRepository {
 
   createCourseSection = (
     data: ICourseSection[]
-  ): Promise<HttpResponse<IResponseCourseSection>> => {
+  ): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(CourseSectionEndpoints.course_section);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -36,7 +36,7 @@ class CourseSectionRepository {
 
   editCourseSection = (
     data: ICourseSection[]
-  ): Promise<HttpResponse<IResponseCourseSection>> => {
+  ): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(CourseSectionEndpoints.course_section);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -49,7 +49,7 @@ class CourseSectionRepository {
 
   deleteCourseSection = (
     courseSectionId: number[]
-  ): Promise<HttpResponse<IResponseCourseSection>> => {
+  ): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(
       CourseSectionEndpoints.course_section,
       CourseSectionEndpoints.courseSectionId

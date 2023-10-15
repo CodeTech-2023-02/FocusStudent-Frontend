@@ -47,6 +47,3 @@ export interface User {
   address: string;
 }
 
-export interface ILessonResponse {
-  message: string;
-}

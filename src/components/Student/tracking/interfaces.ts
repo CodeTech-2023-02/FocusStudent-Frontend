@@ -14,9 +14,9 @@ export interface ExpressionData {
 }
 
 export enum TimeStatus {
-  begin = 0,
-  middle = 1,
-  end = 2,
+  begin = "BEGIN",
+  middle = "MIDDLE",
+  end = "END",
 }
 
 export enum ConcentrateStatus {
@@ -25,20 +25,21 @@ export enum ConcentrateStatus {
 }
 
 export enum FaceStatus {
-  neutral = 0,
-  happy = 1,
-  sad = 2,
-  angry = 3,
-  fearful = 4,
-  disgusted = 5,
-  surprised = 6,
+  neutral = "NEUTRAL",
+  happy = "HAPPY",
+  sad = "SAD",
+  angry = "ANGRY",
+  fearful = "FEARFUL",
+  disgusted = "DISGUSTED",
+  surprised = "SURPRISED",
 }
 
 export interface Analysis {
-  timeStatus: number;
-  concentrateStatus: number;
-  faceStatus: number;
+  timeStatus: TimeStatus;
+  concentrateStatus: ConcentrateStatus;
+  faceStatus: FaceStatus;
 }
+
 
 export interface StudentAnalysis {
   studentId: number;

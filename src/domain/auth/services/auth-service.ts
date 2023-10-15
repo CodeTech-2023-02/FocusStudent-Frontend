@@ -5,10 +5,10 @@ import {
   ILogin,
   ILoginResponse,
   IRegister,
-  IRegisterResponse,
   IUpdateUser,
 } from "../constants/interfaces";
 import { authRepository } from "../repositories/auth-repository";
+import { GenericResponse } from "../../../infra/interfaces";
 
 export function useLogin() {
   return useMutation<ILoginResponse, Error, ILogin>({
@@ -18,7 +18,7 @@ export function useLogin() {
 }
 
 export function useRegister() {
-  return useMutation<IRegisterResponse, Error, IRegister>({
+  return useMutation<GenericResponse, Error, IRegister>({
     mutationFn: (data: IRegister) => {
       if (data.email.includes("_profesor")) {
         delete data.sectionId;
@@ -41,7 +41,7 @@ export function useGetAllUsersByLastNamesAndRole() {
 
 export function useUpdateUser() {
   return useMutation<
-    IRegisterResponse,
+  GenericResponse,
     Error,
     { id: number; data: IUpdateUser }
   >({
@@ -52,7 +52,7 @@ export function useUpdateUser() {
 
 export function useChangePassword() {
   return useMutation<
-    IRegisterResponse,
+  GenericResponse,
     Error,
     { id: number; data: IChangePassword }
   >({

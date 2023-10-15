@@ -38,6 +38,3 @@ export interface User {
   address: string;
 }
 
-export interface IResponseCourseSection {
-  message: string;
-}

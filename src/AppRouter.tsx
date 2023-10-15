@@ -140,7 +140,7 @@ const AppRouter: React.FC = () => {
               }
             />
             <Route
-              path={STUDENT_TRACKING}
+              path={`${STUDENT_TRACKING}/:id`}
               element={
                 <ProtectedElement roles={["STUDENT"]}>
                   <TrackingComponent />

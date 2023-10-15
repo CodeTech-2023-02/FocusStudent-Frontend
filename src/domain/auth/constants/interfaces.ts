@@ -23,10 +23,6 @@ export interface IRegister {
   sectionId?: number;
 }
 
-export interface IRegisterResponse {
-  message: string;
-}
-
 export interface IUpdateUser {
   names: string;
   lastNames: string;

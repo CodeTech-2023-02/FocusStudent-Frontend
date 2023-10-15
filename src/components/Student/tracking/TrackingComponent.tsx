@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { openDB } from "idb";
 import { useAuth } from "../../../state/AuthContext";
 import {
+  Analysis,
   ConcentrateStatus,
   FaceStatus,
   TimeStatus,
@@ -192,10 +193,10 @@ const TrackingComponent: React.FC = () => {
     await clearDatabase();
   };
 
-  const analyze_data_fixed = (data: TrackingData) => {
+  const analyze_data_fixed = (data: TrackingData): Analysis[] => {
     const trackingData = data.trackingData;
     const n = trackingData.length;
-
+  
     let segments: ExpressionData[][] = [];
     if (n < 3) {
       segments.push(trackingData);
@@ -206,27 +207,32 @@ const TrackingComponent: React.FC = () => {
         trackingData.slice(Math.floor((2 * n) / 3)),
       ];
     }
-
-    const results = [];
+  
+    const results: Analysis[] = [];
     for (let idx = 0; idx < segments.length; idx++) {
       const segment = segments[idx];
-
-      const avgEmotions: { [key: string]: number } = {};
-      for (const emotion in FaceStatus) {
-        avgEmotions[emotion] = 0;
-      }
-
+  
+      const avgEmotions: ExpressionData = {
+        neutral: 0,
+        happy: 0,
+        sad: 0,
+        angry: 0,
+        fearful: 0,
+        disgusted: 0,
+        surprised: 0,
+      };
+  
       for (const record of segment) {
-        for (const emotion in record) {
-          avgEmotions[emotion] += record[emotion as keyof ExpressionData];
+        for (const emotion in avgEmotions) {
+          avgEmotions[emotion as keyof ExpressionData] += record[emotion as keyof ExpressionData];
         }
       }
-
+  
       for (const emotion in avgEmotions) {
-        avgEmotions[emotion] /= segment.length;
+        avgEmotions[emotion as keyof ExpressionData] /= segment.length;
       }
-
-      let timeStatus: number;
+  
+      let timeStatus: TimeStatus;
       if (n < 3) {
         timeStatus = TimeStatus.middle;
       } else {
@@ -237,30 +243,30 @@ const TrackingComponent: React.FC = () => {
             ? TimeStatus.middle
             : TimeStatus.end;
       }
-
+  
       const concentrateStatus =
-        avgEmotions["neutral"] > 0.6 || avgEmotions["surprised"] > 0.6
+        avgEmotions.neutral > 0.6 || avgEmotions.surprised > 0.6
           ? ConcentrateStatus.concentrate
           : ConcentrateStatus.desconcentrate;
-
-      let maxEmotion = "neutral";
+  
+      let maxEmotion: keyof ExpressionData = "neutral";
       for (const emotion in avgEmotions) {
-        if (avgEmotions[emotion] > avgEmotions[maxEmotion]) {
-          maxEmotion = emotion;
+        if (avgEmotions[emotion as keyof ExpressionData] > avgEmotions[maxEmotion]) {
+          maxEmotion = emotion as keyof ExpressionData;
         }
       }
-      const faceStatus = FaceStatus[maxEmotion as keyof typeof FaceStatus];
-
+      const faceStatus = maxEmotion.toUpperCase() as FaceStatus;
+  
       results.push({
-        timeStatus: timeStatus,
-        concentrateStatus: concentrateStatus,
-        faceStatus: faceStatus,
+        timeStatus,
+        concentrateStatus,
+        faceStatus,
       });
     }
-
+  
     return results;
   };
-
+  
   return (
     <Container>
       <Typography

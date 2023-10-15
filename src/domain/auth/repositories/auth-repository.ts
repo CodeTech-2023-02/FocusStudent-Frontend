@@ -1,6 +1,7 @@
 import { axiosHttpClient } from "../../../infra/http/axios-http-client";
 import { UtilsHttp } from "../../../infra/http/utils";
 import {
+  GenericResponse,
   HttpClient,
   HttpMethod,
   HttpResponse,
@@ -12,7 +13,6 @@ import {
   ILogin,
   ILoginResponse,
   IRegister,
-  IRegisterResponse,
   IUpdateUser,
 } from "../constants/interfaces";
 
@@ -36,7 +36,7 @@ class AuthRepository {
     });
   };
 
-  register = (data: IRegister): Promise<HttpResponse<IRegisterResponse>> => {
+  register = (data: IRegister): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(AuthEndpoints.user, AuthEndpoints.register);
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({
@@ -50,7 +50,7 @@ class AuthRepository {
   changePassword = (
     id: number,
     data: IChangePassword
-  ): Promise<HttpResponse<IRegisterResponse>> => {
+  ): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(
       AuthEndpoints.user,
       id.toString(),
@@ -68,7 +68,7 @@ class AuthRepository {
   updateUser = (
     id: number,
     data: IUpdateUser
-  ): Promise<HttpResponse<IRegisterResponse>> => {
+  ): Promise<HttpResponse<GenericResponse>> => {
     const url = buildUrl(AuthEndpoints.user, id.toString());
     const headers = UtilsHttp.BaseHeaders();
     return this.httpClient.request({

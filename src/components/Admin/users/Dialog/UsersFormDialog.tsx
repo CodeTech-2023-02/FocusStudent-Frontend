@@ -22,6 +22,7 @@ import { useGetAllSections } from "../../../../domain/section/services/section-s
 import { IUsersForm, UserFormStrategy } from "../interfaces";
 import { OkModal } from "../../../../abstracts/Modals/Modals";
 import useModal from "../../../../hooks/useModal";
+import { IRegister } from "../../../../domain/auth/constants/interfaces";
 
 interface StudentFormDialogProps {
   open: boolean;
@@ -65,58 +66,69 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
   const editUserMutation = useUpdateUser();
   const successModal = useModal();
 
-  const courseSchema = yup.object().shape({
-    id: yup.number().optional(),
-    names: yup.string().required("Nombre es requerido"),
-    lastNames: yup.string().required("Apellido es requerido"),
-    phoneNumber: yup
-      .string()
-      .required("Teléfono es requerido")
-      .matches(/^[0-9]{9}$/, "El teléfono debe tener 9 dígitos"),
-    email: getEmailSchema(userType), // Usar función para determinar validación de email
-    dni: yup
-      .string()
-      .required("DNI es requerido")
-      .matches(/^[0-9]{8}$/, "El DNI debe tener 8 dígitos"),
-    address: yup.string().required("Dirección es requerida"),
-    password: yup
-      .string()
-      .required("Contraseña es requerida")
-      .min(6, "La contraseña debe tener al menos 6 caracteres"),
-    sectionId: yup.number().optional(),
+  const courseSchema = yup.lazy((_: IUsersForm) => {
+
+    return yup.object().shape({
+      id: yup.number().optional(),
+      names: yup.string().required("Nombre es requerido"),
+      lastNames: yup.string().required("Apellido es requerido"),
+      phoneNumber: yup
+        .string()
+        .required("Teléfono es requerido")
+        .matches(/^[0-9]{9}$/, "El teléfono debe tener 9 dígitos"),
+      email: getEmailSchema(userType), // Usar función para determinar validación de email
+      dni: yup
+        .string()
+        .required("DNI es requerido")
+        .matches(/^[0-9]{8}$/, "El DNI debe tener 8 dígitos"),
+      address: yup.string().required("Dirección es requerida"),
+      password: mode === 'create'
+        ? yup.string().required('Contraseña es requerida').min(6, 'La contraseña debe tener al menos 6 caracteres')
+        : yup.string().optional(),
+      sectionId: yup.number().optional(),
+    });
   });
 
   const internalHandleSubmit = (data: IUsersForm) => {
     if (mode === "create") {
       delete data.id;
-      createUserMutation.mutate(data, {
-        onSuccess: () => {
-          successModal.openModal(
-            () => {
-              successModal.closeModal();
-            },
-            () => {
-              refetch && refetch();
-              onClose();
-              reset();
-            },
-            "Operación exitosa",
-            "Usuario " + usuario + " creado correctamente"
-          );
-        },
-        onError: (error: any) => {
-          successModal.openModal(
-            () => {
-              successModal.closeModal();
-            },
-            () => {},
-            "Ocurrió un error",
-            error.response.data.message ||
+      if (data.password !== undefined) {
+        const userData: IRegister = {
+          ...data,
+          password: data.password
+        };
+        createUserMutation.mutate(userData, {
+          onSuccess: () => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => {
+                refetch && refetch();
+                onClose();
+                reset();
+              },
+              "Operación exitosa",
+              "Usuario " + usuario + " creado correctamente"
+            );
+          },
+          onError: (error: any) => {
+            successModal.openModal(
+              () => {
+                successModal.closeModal();
+              },
+              () => { },
+              "Ocurrió un error",
+              error.response.data.message ||
               "Ocurrió un error al eliminar la sección"
-          );
-        },
-      });
+            );
+          },
+        });
+      }
+
     } else if (mode === "edit") {
+      console.log("data", data);
+      debugger;
     }
   };
 
@@ -364,8 +376,8 @@ const TeacherStrategy: UserFormStrategy = {
   renderExtraFields: (____) => {
     const [_, __] = React.useState([]);
     const ___ = useGetAllSections();
-    React.useEffect(() => {}, []);
-    React.useEffect(() => {}, [___]);
+    React.useEffect(() => { }, []);
+    React.useEffect(() => { }, [___]);
 
     return null;
   },

@@ -1,9 +1,10 @@
 import { useMutation } from "react-query";
 import { lessonRepository } from "../repositories/lesson-repository";
-import { GetLessons, ILesson, ILessonResponse } from "../constants/interfaces";
+import { GetLessons, ILesson } from "../constants/interfaces";
+import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateLesson() {
-  return useMutation<ILessonResponse, Error, ILesson>({
+  return useMutation<GenericResponse, Error, ILesson>({
     mutationFn: (data: ILesson) =>
       lessonRepository.create(data).then((response) => response.body),
   });
@@ -11,7 +12,7 @@ export function useCreateLesson() {
 
 export function useEditLesson() {
   return useMutation<
-    ILessonResponse,
+  GenericResponse,
     Error,
     { lessonId: number; data: ILesson }
   >({
@@ -21,7 +22,7 @@ export function useEditLesson() {
 }
 
 export function useDeleteLesson() {
-  return useMutation<ILessonResponse, Error, number>({
+  return useMutation<GenericResponse, Error, number>({
     mutationFn: (lessonId: number) =>
       lessonRepository.delete(lessonId).then((response) => response.body),
   });
