@@ -25,7 +25,7 @@ export default defineConfig({
           ],
           'libs-chunk': [
             '@tensorflow/tfjs',
-            '@tensorflow/tfjs-node',
+            '@tensorflow/tfjs',
             'axios',
             'apexcharts',
             'date-fns',
