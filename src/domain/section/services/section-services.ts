@@ -3,11 +3,11 @@ import { sectionRepository } from "../repositories/section-repository";
 import {
   ISection,
   ISectionGet,
-  ISectionResponse,
 } from "../constants/interfaces";
+import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateSection() {
-  return useMutation<ISectionResponse, Error, ISection>({
+  return useMutation<GenericResponse, Error, ISection>({
     mutationFn: (data: ISection) =>
       sectionRepository.create(data).then((response) => response.body),
   });
@@ -15,7 +15,7 @@ export function useCreateSection() {
 
 export function useEditSection() {
   return useMutation<
-    ISectionResponse,
+  GenericResponse,
     Error,
     { sectionId: number; data: ISection }
   >({
@@ -25,7 +25,7 @@ export function useEditSection() {
 }
 
 export function useDeleteSection() {
-  return useMutation<ISectionResponse, Error, number>({
+  return useMutation<GenericResponse, Error, number>({
     mutationFn: (sectionId: number) =>
       sectionRepository.delete(sectionId).then((response) => response.body),
   });

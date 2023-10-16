@@ -12,6 +12,8 @@ import { useGetAllTeachers } from "../../../domain/teacher/services/teacher-serv
 import { ITeacher } from "../../../domain/teacher/constants/interfaces";
 import { IGetUsers } from "../../../domain/auth/constants/interfaces";
 import { PasswordChangeDialog } from "./Dialog/PasswordChangeDialog";
+import { IStudent } from "../../../domain/students/constants/interfaces";
+import { useGetAllStudents } from "../../../domain/students/services/student-services";
 
 const mapTeacherToUsersForm = (teacher: ITeacher): IUsersForm => {
   return {
@@ -39,6 +41,20 @@ const mapDataToUsersForm = (data: IGetUsers): IUsersForm => {
   };
 };
 
+function mapStudentToUsersForm(student: IStudent): IUsersForm {
+  return {
+      id: student.user.id,
+      names: student.user.names,
+      lastNames: student.user.lastNames,
+      phoneNumber: student.user.phoneNumber,
+      email: student.user.email,
+      dni: student.user.dni,
+      address: student.user.address,
+      sectionId: student.section.id
+  };
+}
+
+
 const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
   userType,
 }) => {
@@ -52,24 +68,26 @@ const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
   const confirmationDeleteModal = useModal();
   const [users, setUsers] = React.useState<IUsersForm[]>([]);
 
-  const fetchUsersData = () => {
-    if (userType === "teachers") {
-      getTeachers.mutate();
-    } else if (userType === "students") {
-      //getStudents.mutate();
-    }
-  };
+  const getStudents = useGetAllStudents();
 
-  const fetchAndMapUsers = React.useCallback(() => {
-    if (userType === "teachers" && getTeachers.data) {
-      const mappedUsers = getTeachers.data.map(mapTeacherToUsersForm);
-      setUsers(mappedUsers);
+const fetchUsersData = () => {
+    if (userType === "teachers") {
+        getTeachers.mutate();
     } else if (userType === "students") {
-      //  && getStudents.data
-      //const mappedUsers = getStudents.data.map(mapStudentToUsersForm); // Assuming you create a similar function to map students.
-      //setUsers(mappedUsers);
+        getStudents.mutate();
     }
-  }, [getTeachers.data, userType]); // getStudents.data,
+};
+
+const fetchAndMapUsers = React.useCallback(() => {
+    if (userType === "teachers" && getTeachers.data) {
+        const mappedUsers = getTeachers.data.map(mapTeacherToUsersForm);
+        setUsers(mappedUsers);
+    } else if (userType === "students" && getStudents.data) {
+        const mappedUsers = getStudents.data.map(mapStudentToUsersForm);
+        setUsers(mappedUsers);
+    }
+}, [getTeachers.data, getStudents.data, userType]);
+
 
   React.useEffect(() => {
     fetchUsersData();
@@ -77,7 +95,7 @@ const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
 
   React.useEffect(() => {
     fetchAndMapUsers();
-  }, [fetchAndMapUsers]);
+}, [fetchAndMapUsers, getStudents.data]);
 
   React.useEffect(() => {
     if (getAllUsersByLastNamesAndRoleMutation.data) {

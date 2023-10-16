@@ -193,7 +193,11 @@ function SidebarMenu() {
     routes = [
       teacherAdminRoutes[0],
       adminRoutes[0],
-      ...teacherAdminRoutes.slice(1).filter(route => route.path !== TEACHERS),
+      teacherAdminRoutes[1],
+      teacherAdminRoutes[2],
+      teacherAdminRoutes[3],
+      teacherAdminRoutes[4],
+      teacherAdminRoutes[5],
     ];
   }
   
