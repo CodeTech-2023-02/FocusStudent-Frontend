@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000, // 1000 kB = 1 MB
     rollupOptions: {
+      external: ['mock-aws-s3', 'aws-sdk', 'nock'], 
       output: {
         manualChunks: {
           'react-chunk': [
