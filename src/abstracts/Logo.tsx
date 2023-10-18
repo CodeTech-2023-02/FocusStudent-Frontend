@@ -12,7 +12,7 @@ function Logo() {
           alignItems="center"
           position="relative"
         >
-          <img src="/public/assets/school.png" alt="logo" width={"80px"} />
+          <img src="assets/school.png" alt="logo" width={"80px"} />
           <Badge
             sx={{
               ".MuiBadge-badge": {

@@ -10,6 +10,8 @@ export interface ILoginResponse {
   id: number;
   role: Roles;
   name: string;
+  studentId: number | null;
+  teacherId: number | null;
 }
 
 export interface IRegister {

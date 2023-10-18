@@ -42,7 +42,7 @@ const TrackingComponent: React.FC = () => {
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const { currentUser } = useAuth();
-  const userId = currentUser?.id || 0;
+  const userId = currentUser?.studentId || 0;
 
   const { id: lessonId } = useParams();
 
@@ -66,6 +66,20 @@ const TrackingComponent: React.FC = () => {
     }
 
     initDB();
+  }, []);
+
+  useEffect(() => {
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        let tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+      } catch (err) {
+        console.error("Error obteniendo permisos de cámara:", err);
+      }
+    };
+
+    getCameraPermission();
   }, []);
 
   const addToDatabase = async (data: ExpressionData, key: any) => {
@@ -188,7 +202,6 @@ const TrackingComponent: React.FC = () => {
       studentId: userId,
       trackingData: storedData,
     });
-    debugger;
     const analysisData: IAnalysis = {
       start: start!,
       end: new Date(), 

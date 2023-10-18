@@ -87,6 +87,8 @@ const Login = () => {
             token: data.token,
             id: data.id,
             name: data.name,
+            studentId: data.studentId,
+            teacherId: data.teacherId,
           });
 
           if (data.role === Roles.TEACHER) {

@@ -128,7 +128,6 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
 
     } else if (mode === "edit") {
       console.log("data", data);
-      debugger;
     }
   };
 
