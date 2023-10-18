@@ -32,8 +32,8 @@ export interface IUpdateUser {
   dni: string;
   email: string;
   address: string;
-  sectionId: number;
-  studentId: number;
+  sectionId: number | null;
+  studentId: number | null;
 }
 
 export interface IChangePassword {

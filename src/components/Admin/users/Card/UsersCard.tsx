@@ -5,6 +5,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Box, Card, CardContent, Grid, IconButton } from "@mui/material";
 import React from "react";
 import { IUsersForm } from "../interfaces";
+import { useAuth } from "../../../../state/AuthContext";
 
 interface StudentCardProps {
   user: IUsersForm;
@@ -17,6 +18,10 @@ const UsersCard: React.FC<StudentCardProps> = ({
   onEdit,
   changePassword,
 }) => {
+  const { currentUser } = useAuth();
+  const role = currentUser?.role || "";
+
+
   const [showActions, setShowActions] = React.useState(false);
 
   return (
@@ -48,6 +53,7 @@ const UsersCard: React.FC<StudentCardProps> = ({
               {course.names} {course.lastNames}{" "}
             </Box>
           </Grid>
+          {role !== "STUDENT" && role !== "TEACHER" && (
           <Grid
             item
             xs={4}
@@ -68,6 +74,7 @@ const UsersCard: React.FC<StudentCardProps> = ({
               <ArrowForwardIosIcon fontSize="large" />
             )}
           </Grid>
+          )}
         </Grid>
       </CardContent>
     </Card>

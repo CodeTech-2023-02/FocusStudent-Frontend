@@ -14,6 +14,7 @@ import { IGetUsers } from "../../../domain/auth/constants/interfaces";
 import { PasswordChangeDialog } from "./Dialog/PasswordChangeDialog";
 import { IStudent } from "../../../domain/students/constants/interfaces";
 import { useGetAllStudents } from "../../../domain/students/services/student-services";
+import { useAuth } from "../../../state/AuthContext";
 
 const mapTeacherToUsersForm = (teacher: ITeacher): IUsersForm => {
   return {
@@ -25,6 +26,8 @@ const mapTeacherToUsersForm = (teacher: ITeacher): IUsersForm => {
     dni: teacher.user.dni,
     address: teacher.user.address,
     password: "",
+    studentId: null,
+    sectionId: null,
   };
 };
 
@@ -38,6 +41,8 @@ const mapDataToUsersForm = (data: IGetUsers): IUsersForm => {
     dni: data.dni,
     address: data.address,
     password: "",
+    studentId: null,
+    sectionId: null,
   };
 };
 
@@ -51,12 +56,18 @@ function mapStudentToUsersForm(student: IStudent): IUsersForm {
     dni: student.user.dni,
     address: student.user.address,
     sectionId: student.section.id,
+    studentId: student.id,
   };
 }
 
 const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
   userType,
 }) => {
+
+  const { currentUser } = useAuth();
+  const role = currentUser?.role || "";
+
+
   const title = userType === "students" ? "Estudiantes" : "Profesores";
   const usuario = userType === "students" ? "estudiante" : "profesor";
   const getTeachers = useGetAllTeachers();
@@ -180,6 +191,7 @@ const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
+          {role !== "STUDENT" && role !== "TEACHER" && (
             <Button
               variant="outlined"
               style={{ height: 50 }}
@@ -188,6 +200,7 @@ const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
               Crear nuevo {usuario}
               <AddCircleIcon style={{ margin: 4 }} />
             </Button>
+            )}
           </Grid>
         </Grid>
         <Grid container spacing={3} pt={4}>

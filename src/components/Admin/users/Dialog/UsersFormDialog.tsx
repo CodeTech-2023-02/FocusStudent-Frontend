@@ -2,9 +2,8 @@ import {
   Autocomplete,
   Box,
   Button,
-  DialogActions,
   Grid,
-  TextField,
+  TextField
 } from "@mui/material";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -13,16 +12,16 @@ import { SimpleDialog } from "../../../../abstracts/Modals/SimpleDialog";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
+import { OkModal } from "../../../../abstracts/Modals/Modals";
+import { IRegister } from "../../../../domain/auth/constants/interfaces";
 import {
   useRegister,
   useUpdateUser,
 } from "../../../../domain/auth/services/auth-service";
 import { ISectionGet } from "../../../../domain/section/constants/interfaces";
 import { useGetAllSections } from "../../../../domain/section/services/section-services";
-import { IUsersForm, UserFormStrategy } from "../interfaces";
-import { OkModal } from "../../../../abstracts/Modals/Modals";
 import useModal from "../../../../hooks/useModal";
-import { IRegister } from "../../../../domain/auth/constants/interfaces";
+import { IUsersForm, UserFormStrategy } from "../interfaces";
 
 interface StudentFormDialogProps {
   open: boolean;
@@ -66,31 +65,30 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
   const editUserMutation = useUpdateUser();
   const successModal = useModal();
 
-  const courseSchema = yup.lazy((_: IUsersForm) => {
-    return yup.object().shape({
-      id: yup.number().optional(),
-      names: yup.string().required("Nombre es requerido"),
-      lastNames: yup.string().required("Apellido es requerido"),
-      phoneNumber: yup
-        .string()
-        .required("Teléfono es requerido")
-        .matches(/^[0-9]{9}$/, "El teléfono debe tener 9 dígitos"),
-      email: getEmailSchema(userType), // Usar función para determinar validación de email
-      dni: yup
-        .string()
-        .required("DNI es requerido")
-        .matches(/^[0-9]{8}$/, "El DNI debe tener 8 dígitos"),
-      address: yup.string().required("Dirección es requerida"),
-      password:
-        mode === "create"
-          ? yup
-              .string()
-              .required("Contraseña es requerida")
-              .min(6, "La contraseña debe tener al menos 6 caracteres")
-          : yup.string().optional(),
-      sectionId: yup.number().optional(),
-    });
+  const courseSchema = yup.object().shape({
+    id: yup.number().nullable(),
+    names: yup.string().required("Nombre es requerido"),
+    lastNames: yup.string().required("Apellido es requerido"),
+    phoneNumber: yup
+      .string()
+      .required("Teléfono es requerido")
+      .matches(/^[0-9]{9}$/, "El teléfono debe tener 9 dígitos"),
+    email: getEmailSchema(userType),
+    dni: yup
+      .string()
+      .required("DNI es requerido")
+      .matches(/^[0-9]{8}$/, "El DNI debe tener 8 dígitos"),
+    address: yup.string().required("Dirección es requerida"),
+    password: mode === "create"
+      ? yup
+          .string()
+          .required("Contraseña es requerida")
+          .min(6, "La contraseña debe tener al menos 6 caracteres")
+      : yup.string().nullable(),
+    sectionId: yup.number().nullable(),
+    studentId: yup.number().nullable(),
   });
+  
 
   const internalHandleSubmit = (data: IUsersForm) => {
     if (mode === "create") {
@@ -129,8 +127,42 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
         });
       }
     } else if (mode === "edit") {
-      console.log("data", data);
-    }
+      if (userType === "teachers") {
+          delete data.sectionId;
+          delete data.studentId;
+      }
+
+      editUserMutation.mutate(
+          { id: data.id!, data },
+          {
+              onSuccess: () => {
+                  successModal.openModal(
+                      () => {
+                          successModal.closeModal();
+                      },
+                      () => {
+                          refetch && refetch();
+                          onClose();
+                          reset();
+                      },
+                      "Operación exitosa",
+                      "Usuario " + usuario + " actualizado correctamente"
+                  );
+              },
+              onError: (error: any) => {
+                  successModal.openModal(
+                      () => {
+                          successModal.closeModal();
+                      },
+                      () => {},
+                      "Ocurrió un error",
+                      error.response.data.message ||
+                      "Ocurrió un error al actualizar el usuario"
+                  );
+              },
+          }
+      );
+  }
   };
 
   const initialValues = defaultValues || {
@@ -142,16 +174,24 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
     dni: "",
     address: "",
     password: "",
+    sectionId: null,
+    studentId: null,
   };
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<IUsersForm>({
+  const { handleSubmit, control, reset, formState: { errors } } = useForm<{
+    sectionId?: number;
+    id?: number;
+    names?: string;
+    lastNames?: string;
+    phoneNumber?: string;
+    email?: string;
+    dni?: string;
+    address?: string;
+    password?: string;
+    studentId?: number;
+  }>({
     defaultValues: initialValues,
-    resolver: yupResolver(courseSchema),
+    resolver: yupResolver(courseSchema)
   });
 
   React.useEffect(() => {
@@ -167,6 +207,8 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
         dni: "",
         address: "",
         password: "",
+        sectionId: null,
+        studentId: null,
       });
     }
   }, [mode, defaultValues, reset]);
@@ -186,7 +228,7 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
       height={userType === "students" ? 600 : 540}
     >
       <Box p={3}>
-        <form onSubmit={handleSubmit(internalHandleSubmit)}>
+      <form onSubmit={handleSubmit(internalHandleSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Controller
@@ -247,7 +289,7 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
                     fullWidth
                     helperText={errors.email?.message}
                     error={!!errors.email}
-                    inputProps={{ autocomplete: "off" }}
+                    inputProps={{ autoComplete: "off" }}
                   />
                 )}
               />
@@ -356,14 +398,15 @@ const StudentStrategy: UserFormStrategy = {
           <Autocomplete<ISectionGet, undefined, undefined, undefined>
             id="section-combobox"
             options={sections}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option: ISectionGet) => option.name}
             {...field}
             value={
               sections.find((section) => section.id === field.value) || null
             }
-            onChange={(_, newValue) => {
+            onChange={(_, newValue: ISectionGet | null) => {
               field.onChange(newValue ? newValue.id : null);
-            }}
+          }}
+          
             renderInput={(params) => <TextField {...params} label="Sección" />}
           />
         )}
@@ -384,6 +427,10 @@ const TeacherStrategy: UserFormStrategy = {
   },
   transformSubmitData: (data) => {
     const { sectionId, ...rest } = data;
-    return rest;
-  },
+    return {
+      ...rest,
+      sectionId: null
+    };
+},
+
 };

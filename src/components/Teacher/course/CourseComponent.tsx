@@ -203,7 +203,7 @@ const CourseComponent: React.FC = () => {
     <div>
       <Box p={4}>
         <h1>Cursos</h1>
-        {role !== "STUDENT" && (
+        {role !== "STUDENT" && role !== "TEACHER" && (
           <Button variant="outlined" onClick={handleCreateCourse}>
             Crear nuevo curso
           </Button>

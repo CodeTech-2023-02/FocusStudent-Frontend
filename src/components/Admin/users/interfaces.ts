@@ -9,10 +9,22 @@ export interface IUsersForm {
   dni: string;
   address: string;
   password?: string;
-  sectionId?: number;
+  sectionId: number | null;
+  studentId: number | null;
 }
 
 export interface UserFormStrategy {
-  renderExtraFields: (control: Control<IUsersForm>) => JSX.Element | null;
+  renderExtraFields: (control: Control<{
+    sectionId?: number;
+    id?: number;
+    names?: string;
+    lastNames?: string;
+    phoneNumber?: string;
+    email?: string;
+    dni?: string;
+    address?: string;
+    password?: string;
+    studentId?: number;
+  }>) => JSX.Element | null;
   transformSubmitData: (data: IUsersForm) => IUsersForm;
 }
