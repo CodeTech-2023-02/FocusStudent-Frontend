@@ -1,4 +1,3 @@
 export enum StudentEndpoints {
-    student = "/student",
-  }
-  
+  student = "/student",
+}

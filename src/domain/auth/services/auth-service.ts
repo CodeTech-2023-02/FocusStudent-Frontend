@@ -40,19 +40,17 @@ export function useGetAllUsersByLastNamesAndRole() {
 }
 
 export function useUpdateUser() {
-  return useMutation<
-  GenericResponse,
-    Error,
-    { id: number; data: IUpdateUser }
-  >({
-    mutationFn: ({ id, data }) =>
-      authRepository.updateUser(id, data).then((response) => response.body),
-  });
+  return useMutation<GenericResponse, Error, { id: number; data: IUpdateUser }>(
+    {
+      mutationFn: ({ id, data }) =>
+        authRepository.updateUser(id, data).then((response) => response.body),
+    }
+  );
 }
 
 export function useChangePassword() {
   return useMutation<
-  GenericResponse,
+    GenericResponse,
     Error,
     { id: number; data: IChangePassword }
   >({

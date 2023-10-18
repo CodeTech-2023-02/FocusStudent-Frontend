@@ -1,9 +1,6 @@
 import { useMutation } from "react-query";
 import { courseRepository } from "../repositories/course-repository";
-import {
-  ICreateEditCourse,
-  IGetAllResponse,
-} from "../constants/interfaces";
+import { ICreateEditCourse, IGetAllResponse } from "../constants/interfaces";
 import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateCourse() {
@@ -15,7 +12,7 @@ export function useCreateCourse() {
 
 export function useEditCourse() {
   return useMutation<
-  GenericResponse,
+    GenericResponse,
     Error,
     { courseId: number; data: ICreateEditCourse }
   >({

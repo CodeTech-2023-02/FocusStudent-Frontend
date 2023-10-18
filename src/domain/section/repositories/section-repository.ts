@@ -7,10 +7,7 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { SectionEndpoints } from "../constants/endpoint";
-import {
-  ISection,
-  ISectionGet,
-} from "../constants/interfaces";
+import { ISection, ISectionGet } from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 

@@ -4,7 +4,6 @@ export interface ICreateEditCourse {
   description: string;
 }
 
-
 export interface IGetAllResponse {
   id: number;
   name: string;

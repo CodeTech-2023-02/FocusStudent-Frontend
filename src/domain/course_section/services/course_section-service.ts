@@ -1,9 +1,6 @@
 import { useMutation } from "react-query";
 import { courseSectionRepository } from "../repositories/course_section-repository";
-import {
-  ICourseSection,
-  ICourseSectionTeacher,
-} from "../constants/interfaces";
+import { ICourseSection, ICourseSectionTeacher } from "../constants/interfaces";
 import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateCourseSection() {
@@ -16,14 +13,12 @@ export function useCreateCourseSection() {
 }
 
 export function useEditCourseSection() {
-  return useMutation<GenericResponse, Error, { data: ICourseSection[] }>(
-    {
-      mutationFn: ({ data }) =>
-        courseSectionRepository
-          .editCourseSection(data)
-          .then((response) => response.body),
-    }
-  );
+  return useMutation<GenericResponse, Error, { data: ICourseSection[] }>({
+    mutationFn: ({ data }) =>
+      courseSectionRepository
+        .editCourseSection(data)
+        .then((response) => response.body),
+  });
 }
 
 export function useDeleteCourseSection() {

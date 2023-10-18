@@ -1,9 +1,6 @@
 import { useMutation } from "react-query";
 import { sectionRepository } from "../repositories/section-repository";
-import {
-  ISection,
-  ISectionGet,
-} from "../constants/interfaces";
+import { ISection, ISectionGet } from "../constants/interfaces";
 import { GenericResponse } from "../../../infra/interfaces";
 
 export function useCreateSection() {
@@ -15,7 +12,7 @@ export function useCreateSection() {
 
 export function useEditSection() {
   return useMutation<
-  GenericResponse,
+    GenericResponse,
     Error,
     { sectionId: number; data: ISection }
   >({

@@ -3,7 +3,7 @@ import { UtilsHttp } from "../../../infra/http/utils";
 import {
   HttpClient,
   HttpMethod,
-  HttpResponse
+  HttpResponse,
 } from "../../../infra/interfaces";
 import { StudentEndpoints } from "../constants/endpoint";
 import { IStudent } from "../constants/interfaces";
@@ -26,10 +26,8 @@ class StudentRepository {
       headers,
     });
   };
-
 }
 
 const studentRepository = new StudentRepository(axiosHttpClient);
 
 export { StudentRepository, studentRepository };
-

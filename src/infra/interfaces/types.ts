@@ -18,6 +18,6 @@ export type GenericSuccessResponse = {
   status: string;
 };
 
-export interface GenericResponse{
+export interface GenericResponse {
   message: string;
 }

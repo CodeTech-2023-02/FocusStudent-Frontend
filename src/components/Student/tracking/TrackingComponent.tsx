@@ -71,9 +71,11 @@ const TrackingComponent: React.FC = () => {
   useEffect(() => {
     const getCameraPermission = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         let tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
+        tracks.forEach((track) => track.stop());
       } catch (err) {
         console.error("Error obteniendo permisos de cámara:", err);
       }
@@ -204,12 +206,12 @@ const TrackingComponent: React.FC = () => {
     });
     const analysisData: IAnalysis = {
       start: start!,
-      end: new Date(), 
+      end: new Date(),
       analyses: analysis,
       studentId: userId,
-      lessonId: Number(lessonId), 
+      lessonId: Number(lessonId),
     };
-    
+
     createDetector.mutate(analysisData, {
       onSuccess: () => {
         console.log("Success");
@@ -217,7 +219,7 @@ const TrackingComponent: React.FC = () => {
       onError: (error) => {
         console.log("Error");
       },
-    })
+    });
 
     await clearDatabase();
   };
@@ -225,7 +227,7 @@ const TrackingComponent: React.FC = () => {
   const analyze_data_fixed = (data: TrackingData): Analysis[] => {
     const trackingData = data.trackingData;
     const n = trackingData.length;
-  
+
     let segments: ExpressionData[][] = [];
     if (n < 3) {
       segments.push(trackingData);
@@ -236,11 +238,11 @@ const TrackingComponent: React.FC = () => {
         trackingData.slice(Math.floor((2 * n) / 3)),
       ];
     }
-  
+
     const results: Analysis[] = [];
     for (let idx = 0; idx < segments.length; idx++) {
       const segment = segments[idx];
-  
+
       const avgEmotions: ExpressionData = {
         neutral: 0,
         happy: 0,
@@ -250,17 +252,18 @@ const TrackingComponent: React.FC = () => {
         disgusted: 0,
         surprised: 0,
       };
-  
+
       for (const record of segment) {
         for (const emotion in avgEmotions) {
-          avgEmotions[emotion as keyof ExpressionData] += record[emotion as keyof ExpressionData];
+          avgEmotions[emotion as keyof ExpressionData] +=
+            record[emotion as keyof ExpressionData];
         }
       }
-  
+
       for (const emotion in avgEmotions) {
         avgEmotions[emotion as keyof ExpressionData] /= segment.length;
       }
-  
+
       let timeStatus: TimeStatus;
       if (n < 3) {
         timeStatus = TimeStatus.middle;
@@ -272,30 +275,32 @@ const TrackingComponent: React.FC = () => {
             ? TimeStatus.middle
             : TimeStatus.end;
       }
-  
+
       const concentrateStatus =
         avgEmotions.neutral > 0.6 || avgEmotions.surprised > 0.6
           ? ConcentrateStatus.concentrate
           : ConcentrateStatus.desconcentrate;
-  
+
       let maxEmotion: keyof ExpressionData = "neutral";
       for (const emotion in avgEmotions) {
-        if (avgEmotions[emotion as keyof ExpressionData] > avgEmotions[maxEmotion]) {
+        if (
+          avgEmotions[emotion as keyof ExpressionData] > avgEmotions[maxEmotion]
+        ) {
           maxEmotion = emotion as keyof ExpressionData;
         }
       }
       const faceStatus = maxEmotion.toUpperCase() as FaceStatus;
-  
+
       results.push({
         timeStatus,
         concentrateStatus,
         faceStatus,
       });
     }
-  
+
     return results;
   };
-  
+
   return (
     <Container>
       <Typography

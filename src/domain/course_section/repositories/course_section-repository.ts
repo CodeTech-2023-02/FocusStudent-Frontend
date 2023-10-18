@@ -7,10 +7,7 @@ import {
   HttpResponse,
 } from "../../../infra/interfaces";
 import { CourseSectionEndpoints } from "../constants/endpoint";
-import {
-  ICourseSection,
-  ICourseSectionTeacher,
-} from "../constants/interfaces";
+import { ICourseSection, ICourseSectionTeacher } from "../constants/interfaces";
 
 const HOST_API = import.meta.env.VITE_APP_API;
 

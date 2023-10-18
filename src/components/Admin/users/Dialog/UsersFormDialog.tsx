@@ -67,7 +67,6 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
   const successModal = useModal();
 
   const courseSchema = yup.lazy((_: IUsersForm) => {
-
     return yup.object().shape({
       id: yup.number().optional(),
       names: yup.string().required("Nombre es requerido"),
@@ -82,9 +81,13 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
         .required("DNI es requerido")
         .matches(/^[0-9]{8}$/, "El DNI debe tener 8 dígitos"),
       address: yup.string().required("Dirección es requerida"),
-      password: mode === 'create'
-        ? yup.string().required('Contraseña es requerida').min(6, 'La contraseña debe tener al menos 6 caracteres')
-        : yup.string().optional(),
+      password:
+        mode === "create"
+          ? yup
+              .string()
+              .required("Contraseña es requerida")
+              .min(6, "La contraseña debe tener al menos 6 caracteres")
+          : yup.string().optional(),
       sectionId: yup.number().optional(),
     });
   });
@@ -95,7 +98,7 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
       if (data.password !== undefined) {
         const userData: IRegister = {
           ...data,
-          password: data.password
+          password: data.password,
         };
         createUserMutation.mutate(userData, {
           onSuccess: () => {
@@ -117,15 +120,14 @@ export const UsersFormDialog: React.FC<StudentFormDialogProps> = ({
               () => {
                 successModal.closeModal();
               },
-              () => { },
+              () => {},
               "Ocurrió un error",
               error.response.data.message ||
-              "Ocurrió un error al eliminar la sección"
+                "Ocurrió un error al eliminar la sección"
             );
           },
         });
       }
-
     } else if (mode === "edit") {
       console.log("data", data);
     }
@@ -375,8 +377,8 @@ const TeacherStrategy: UserFormStrategy = {
   renderExtraFields: (____) => {
     const [_, __] = React.useState([]);
     const ___ = useGetAllSections();
-    React.useEffect(() => { }, []);
-    React.useEffect(() => { }, [___]);
+    React.useEffect(() => {}, []);
+    React.useEffect(() => {}, [___]);
 
     return null;
   },

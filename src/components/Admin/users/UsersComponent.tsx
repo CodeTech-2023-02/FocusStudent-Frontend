@@ -43,17 +43,16 @@ const mapDataToUsersForm = (data: IGetUsers): IUsersForm => {
 
 function mapStudentToUsersForm(student: IStudent): IUsersForm {
   return {
-      id: student.user.id,
-      names: student.user.names,
-      lastNames: student.user.lastNames,
-      phoneNumber: student.user.phoneNumber,
-      email: student.user.email,
-      dni: student.user.dni,
-      address: student.user.address,
-      sectionId: student.section.id
+    id: student.user.id,
+    names: student.user.names,
+    lastNames: student.user.lastNames,
+    phoneNumber: student.user.phoneNumber,
+    email: student.user.email,
+    dni: student.user.dni,
+    address: student.user.address,
+    sectionId: student.section.id,
   };
 }
-
 
 const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
   userType,
@@ -70,24 +69,23 @@ const UsersComponent: React.FC<{ userType: "students" | "teachers" }> = ({
 
   const getStudents = useGetAllStudents();
 
-const fetchUsersData = () => {
+  const fetchUsersData = () => {
     if (userType === "teachers") {
-        getTeachers.mutate();
+      getTeachers.mutate();
     } else if (userType === "students") {
-        getStudents.mutate();
+      getStudents.mutate();
     }
-};
+  };
 
-const fetchAndMapUsers = React.useCallback(() => {
+  const fetchAndMapUsers = React.useCallback(() => {
     if (userType === "teachers" && getTeachers.data) {
-        const mappedUsers = getTeachers.data.map(mapTeacherToUsersForm);
-        setUsers(mappedUsers);
+      const mappedUsers = getTeachers.data.map(mapTeacherToUsersForm);
+      setUsers(mappedUsers);
     } else if (userType === "students" && getStudents.data) {
-        const mappedUsers = getStudents.data.map(mapStudentToUsersForm);
-        setUsers(mappedUsers);
+      const mappedUsers = getStudents.data.map(mapStudentToUsersForm);
+      setUsers(mappedUsers);
     }
-}, [getTeachers.data, getStudents.data, userType]);
-
+  }, [getTeachers.data, getStudents.data, userType]);
 
   React.useEffect(() => {
     fetchUsersData();
@@ -95,7 +93,7 @@ const fetchAndMapUsers = React.useCallback(() => {
 
   React.useEffect(() => {
     fetchAndMapUsers();
-}, [fetchAndMapUsers, getStudents.data]);
+  }, [fetchAndMapUsers, getStudents.data]);
 
   React.useEffect(() => {
     if (getAllUsersByLastNamesAndRoleMutation.data) {

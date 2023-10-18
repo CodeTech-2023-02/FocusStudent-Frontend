@@ -28,7 +28,6 @@ class DetectorRepository {
       body: data,
     });
   };
-
 }
 
 const detectorRepository = new DetectorRepository(axiosHttpClient);

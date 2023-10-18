@@ -11,7 +11,7 @@ import {
   REPORT,
   SECTION,
   STUDENTS,
-  TEACHERS
+  TEACHERS,
 } from "../../constants/routes";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { useAuth } from "../../state/AuthContext";
@@ -188,7 +188,7 @@ function SidebarMenu() {
   if (currentUserRole.toUpperCase() === Roles.STUDENT) {
     routes = studentRoutes;
   } else if (currentUserRole.toUpperCase() === Roles.TEACHER) {
-    routes = teacherAdminRoutes.filter(route => route.path !== TEACHERS);
+    routes = teacherAdminRoutes.filter((route) => route.path !== TEACHERS);
   } else if (currentUserRole.toUpperCase() === Roles.ADMIN) {
     routes = [
       teacherAdminRoutes[0],
@@ -200,7 +200,6 @@ function SidebarMenu() {
       teacherAdminRoutes[5],
     ];
   }
-  
 
   return (
     <MenuWrapper>

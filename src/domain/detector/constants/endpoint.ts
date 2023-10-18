@@ -1,3 +1,3 @@
 export enum DetectorEndpoints {
-    detector = "/detector",
+  detector = "/detector",
 }

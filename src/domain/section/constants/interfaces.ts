@@ -6,4 +6,3 @@ export interface ISectionGet {
   id: number;
   name: string;
 }
-

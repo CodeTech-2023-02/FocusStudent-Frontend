@@ -40,7 +40,6 @@ export interface Analysis {
   faceStatus: FaceStatus;
 }
 
-
 export interface StudentAnalysis {
   studentId: number;
   analysis: Analysis[];

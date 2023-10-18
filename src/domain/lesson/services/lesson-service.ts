@@ -12,7 +12,7 @@ export function useCreateLesson() {
 
 export function useEditLesson() {
   return useMutation<
-  GenericResponse,
+    GenericResponse,
     Error,
     { lessonId: number; data: ILesson }
   >({
