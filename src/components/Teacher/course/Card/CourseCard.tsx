@@ -4,17 +4,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import PeopleIcon from "@mui/icons-material/People";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Grid,
-  IconButton,
+  IconButton
 } from "@mui/material";
 import React from "react";
 import CourseDrawer from "../Drawer/CourseDrawer";
+import StudentCourseDrawer from "../Drawer/StudentCourseDrawer";
 import { ICourseForm } from "../ICourseForm";
-import { useNavigate } from "react-router-dom";
-import ArtTrackIcon from "@mui/icons-material/ArtTrack";
 interface CourseCardProps {
   course: ICourseForm;
   onEdit: (course: ICourseForm) => void;
@@ -32,11 +30,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   const [showActions, setShowActions] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const navigate = useNavigate();
-
-  const redirectTracking = () => {
-    navigate(`/tracking/${course.id}`);
-  };
+  
 
   return (
     <Card
@@ -79,9 +73,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
               />
             ) : showActions ? (
               role === "STUDENT" ? (
-                <Button onClick={redirectTracking} variant="contained">
-                  Tracking
-                </Button>
+                <ArrowForwardIosIcon
+                fontSize="large"
+                onClick={() => setDrawerOpen(true)}
+                style={{ cursor: "pointer" }}
+              />
               ) : (
                 <>
                   <IconButton color="primary" onClick={() => onEdit(course)}>
@@ -106,6 +102,13 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <CourseDrawer
           isOpen={drawerOpen}
           idForLessons={idForLessons}
+          selectedCourse={course}
+          onClose={() => setDrawerOpen(false)}
+        />
+      )}
+      {role === "STUDENT" && (
+        <StudentCourseDrawer
+          isOpen={drawerOpen}
           selectedCourse={course}
           onClose={() => setDrawerOpen(false)}
         />

@@ -3,4 +3,5 @@ export interface ICourseForm {
   name: string;
   year: number;
   description: string;
+  lessonDescription?: string | null;
 }

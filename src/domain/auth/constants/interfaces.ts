@@ -12,6 +12,7 @@ export interface ILoginResponse {
   name: string;
   studentId: number | null;
   teacherId: number | null;
+  sectionId: number | null;
 }
 
 export interface IRegister {

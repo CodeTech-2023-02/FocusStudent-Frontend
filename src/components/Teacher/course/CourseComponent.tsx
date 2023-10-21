@@ -12,7 +12,7 @@ import {
   useGetAllCourses,
 } from "../../../domain/course/services/course-service";
 import { useAuth } from "../../../state/AuthContext";
-import { useGetAllCoursesSectionByTeacher } from "../../../domain/course_section/services/course_section-service";
+import { useGetAllCoursesSectionBySection, useGetAllCoursesSectionByTeacher } from "../../../domain/course_section/services/course_section-service";
 
 const CourseComponent: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -22,9 +22,10 @@ const CourseComponent: React.FC = () => {
   const createCourseMutation = useCreateCourse();
   const editCourseMutation = useEditCourse();
   const deleteCourseMutation = useDeleteCourse();
-  const getCourseMutation = useGetAllCourses();
+  const getCourseMutation = useGetAllCoursesSectionBySection();
   const getAllCoursesSectionByTeacherMutation =
     useGetAllCoursesSectionByTeacher();
+  const getAllCourses = useGetAllCourses();
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const successModal = useModal();
@@ -35,6 +36,7 @@ const CourseComponent: React.FC = () => {
 
   const { currentUser } = useAuth();
   const role = currentUser?.role || "";
+  const sectionId = currentUser?.sectionId || 0;
 
   const [dialogMode, setDialogMode] = React.useState<"create" | "edit">(
     "create"
@@ -54,8 +56,27 @@ const CourseComponent: React.FC = () => {
           setLoading(false);
         },
       });
-    } else {
-      getCourseMutation.mutate(undefined, {
+    } else if (role === "STUDENT" && currentUser){
+      getCourseMutation.mutate(sectionId, {
+        onSuccess: (response) => {
+          const mappedCourses = response.map(item => ({
+            id: item.id,
+            name: item.course.name,
+            year: item.course.year,
+            description: item.course.description,
+          }));
+          
+          setCourses(mappedCourses);
+          setLoading(false);
+        },
+        onError: (error) => {
+          console.error("Error al obtener los cursos:", error);
+          setLoading(false);
+        },
+      });
+    }
+    else {
+      getAllCourses.mutate(undefined, {
         onSuccess: (response) => {
           setCourses(response);
           setLoading(false);
