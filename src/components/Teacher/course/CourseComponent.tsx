@@ -45,7 +45,7 @@ const CourseComponent: React.FC = () => {
   const fetchCourses = () => {
     setLoading(true);
     if (role === "TEACHER" && currentUser) {
-      getAllCoursesSectionByTeacherMutation.mutate(currentUser.id, {
+      getAllCoursesSectionByTeacherMutation.mutate(currentUser.teacherId, {
         onSuccess: (response) => {
           setCourses(response.map((item) => item.course));
           setIdForLessons(response.map((item) => item.id));
